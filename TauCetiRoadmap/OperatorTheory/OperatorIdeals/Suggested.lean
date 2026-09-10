@@ -81,6 +81,21 @@ theorem singularValue_comp_comp_le {G' H' : Type*}
 
 end ApproximationNumbers
 
+section FiniteRankCharacterization
+
+variable {𝕜 : Type u} [NontriviallyNormedField 𝕜] [CompleteSpace 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+/-- Vanishing of a finite-dimensional approximation number characterizes rank.
+
+Roadmap: `OI-A24`. -/
+theorem singularValue_eq_zero_iff_rank_le (T : E →L[𝕜] F) (n : ℕ) :
+    T.singularValue n = 0 ↔ T.rank ≤ (n : Cardinal) := by
+  sorry
+
+end FiniteRankCharacterization
+
 end ContinuousLinearMap
 
 namespace TauCetiRoadmap.OperatorIdeals
@@ -383,9 +398,9 @@ noncomputable def symmetricGaugeFamilySymmetric (𝕜 : Type u) [RCLike 𝕜]
 
 /-- **Milestone B2.**  Every family induced by a symmetric gauge respects Ky Fan
 domination. This is the Hardy--Littlewood--Pólya transfer of the Majorization roadmap. The
-extension is the supremum over finitely supported dominated sequences; on antitone
-approximation-number sequences it is computed by monotone convergence along initial
-truncations.
+extension is the supremum over finitely supported dominated sequences. Approximation numbers
+are finite-valued, so their extension is computed by the supremum over initial truncations
+of `OI-B60`.
 
 Roadmap: `OI-B75`. -/
 instance isKyFanDominant_symmetricGaugeFamily (Φ : SymmetricGauge) :
@@ -524,7 +539,9 @@ noncomputable def schattenNorm (p : ℝ) (hp : 1 ≤ p)
     Majorization.UnitarilyInvariantSeminorm 𝕜 E F where
   toFun T :=
     (∑ i : Fin (finrank 𝕜 E), T.singularValues (i : ℕ) ^ p) ^ (1 / p)
+  map_zero' := sorry
   add_le' := sorry
+  neg' := sorry
   smul' := sorry
   unitary_invariant' := sorry
 

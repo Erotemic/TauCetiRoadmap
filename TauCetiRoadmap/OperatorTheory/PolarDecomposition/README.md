@@ -91,8 +91,8 @@ Suggested home: `TauCeti/Analysis/InnerProductSpace/`, with the two scalar squar
 
 * The finite self-adjoint functional calculus over `RCLike`, together with comparison to the
   complex continuous-functional-calculus construction where both apply.
-* The continuous functional calculus for bounded self-adjoint operators on complete real Hilbert
-  spaces, presented through Mathlib's `ContinuousFunctionalCalculus` interface.
+* The continuous functional calculus for bounded self-adjoint operators on complete `RCLike`
+  Hilbert spaces, presented through Mathlib's `ContinuousFunctionalCalculus` interface.
 * The positive square root and its uniqueness; the rectangular modulus over `RCLike` in both
   finite and complete settings, with comparison to the complex CFC construction.
 * Partial isometries for maps between *different* spaces, and their geometric
@@ -141,13 +141,20 @@ elementary tools used by the functional calculus, Weyl theory, and near-isometry
 
 **Continuous and finite functional calculus.**
 
-The real bounded continuous functional calculus supplies the complete-space self-adjoint calculus
-over `ℝ`. The finite spectral calculus gives an explicit eigenbasis model with eigenspace
+The bounded continuous functional calculus supplies the complete-space self-adjoint calculus
+over `RCLike 𝕜`. The finite spectral calculus gives an explicit eigenbasis model with eigenspace
 stability and commutant preservation.
 
-- **PD-A10 — Real bounded continuous functional calculus.** Every complete real Hilbert space
-  admits the continuous functional calculus for bounded self-adjoint operators with continuous
-  real-valued functions.
+- **PD-A10 — Bounded self-adjoint continuous functional calculus.** For a complete
+  Hilbert space `E` over `RCLike 𝕜`, restriction of scalars along `ℝ → 𝕜` gives
+  `Algebra ℝ (E →L[𝕜] E)` and `IsScalarTower ℝ 𝕜 (E →L[𝕜] E)`, with
+  `r • T = (algebraMap ℝ 𝕜 r) • T`. Their specializations agree with Mathlib's
+  real and complex operator-algebra structures. With this real algebra structure, bounded
+  operators carry `ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint` for
+  real-valued symbols. Mathlib's `ContinuousLinearMap.instStarOrderedRingRCLike` then
+  supplies the star order. The scalar structures, calculus, and star order are available
+  through local instances for definitions using `CFC.sqrt`; the resulting modulus API
+  requires the Hilbert-space and completeness hypotheses alone.
 - **PD-A11 — Finite self-adjoint functional calculus.** For a symmetric endomorphism `T` of a
   finite-dimensional real or complex Hilbert space and a function `f : ℝ → ℝ`, define `f(T)` by the
   spectral sum `∑ᵢ f(λᵢ) Pᵢ` over an orthonormal eigenbasis.
@@ -201,8 +208,9 @@ The complete-space modulus carries the same Gram-square-root construction to bou
 rectangular operators. Its pointwise norm identity determines the kernel and operator norm and
 supports the dimension-free polar factor.
 
-- **PD-A36 — Complete-space rectangular modulus.** For a bounded operator `T : E → F` between
-  complete real or complex Hilbert spaces, define its modulus on `E` by `|T| = √(T†T)`.
+- **PD-A36 — Complete-space rectangular modulus.** For a bounded operator
+  `T : E →L[𝕜] F` between complete Hilbert spaces over `RCLike 𝕜`, define
+  `ContinuousLinearMap.modulus T := CFC.sqrt (T† ∘L T)` using `PD-A10`.
 - **PD-A37 — Positivity of the complete-space modulus.** The bounded-operator modulus `|T|` is
   positive.
 - **PD-A38 — Self-adjointness of the complete-space modulus.** The bounded-operator modulus `|T|`
@@ -229,9 +237,9 @@ Downstream results can use one mathematical modulus across both layers.
   spectral construction of `f(T)` agrees with the bounded continuous functional calculus.
 - **PD-A47 — Agreement of finite and complete moduli.** In finite dimension over ℝ or ℂ, the
   linear-map modulus and bounded-operator modulus determine the same operator.
-- **PD-A48 — Complex modulus as a continuous-functional-calculus square root.** For a bounded
-  complex operator `T`, `|T|` is the continuous-functional-calculus positive square root of
-  `T†T`.
+- **PD-A48 — Modulus as a continuous-functional-calculus square root.** For bounded
+  `T : E →L[𝕜] F` between complete Hilbert spaces over `RCLike 𝕜`,
+  `modulus T = CFC.sqrt (T† ∘L T)` by definition.
 - **PD-A49 — Complex finite modulus as operator absolute value.** For a finite-dimensional
   complex endomorphism `A`, its finite-dimensional modulus agrees with the
   continuous-functional-calculus absolute value of the corresponding bounded operator.
@@ -269,7 +277,7 @@ value that `|·|` denotes in Lean, while `modulus` is the bounded-operator spell
 
 **Milestone A1 — supporting Hilbert-space and scalar API.** `PD-A02`–`PD-A09`.
 
-**Milestone A2 — real and finite self-adjoint functional calculi.** `PD-A10`–`PD-A19`.
+**Milestone A2 — bounded and finite self-adjoint functional calculi.** `PD-A10`–`PD-A19`.
 
 **Milestone A3 — positive square root.** `PD-A20`–`PD-A28`.
 
@@ -436,23 +444,24 @@ intertwining equations `UPⱼ = P′ⱼU`.
 
 ### Part C — singular values and the singular system
 
-Mathlib has `LinearMap.singularValues`. This Part supplies the bounded-operator accessor, the
-rectangular Gram-spectrum bridge, the singular vectors, and the Moore–Penrose inverse.
+Mathlib's `LinearMap.singularValues` supplies the singular-value sequence. For bounded
+finite-dimensional maps, the sequence is `T.toLinearMap.singularValues`. This part supplies the
+rectangular Gram-spectrum bridge, modulus and adjoint invariance, singular vectors, and the
+Moore–Penrose inverse.
 
-**Singular-value accessor and spectrum bridge.**
+**Singular values and Gram spectra.**
 
-The bounded-operator accessor gives singular values a carrier-level interface, while the two
-Gram operators connect source and target spectral data. Their common nonzero spectrum gives
-adjoint invariance and the rectangular bridge used by the singular system.
+The two Gram operators connect source and target spectral data. Their common nonzero spectrum
+gives adjoint invariance and the rectangular bridge used by the singular system.
 
-- **PD-C01 — Singular values of bounded operators.** For a finite-dimensional bounded operator,
-  its singular-value sequence is the singular-value sequence of the underlying linear map.
-- **PD-C02 — Compatibility with the underlying linear map.** Passing a finite-dimensional
-  bounded operator to its underlying linear map leaves every singular value unchanged.
 - **PD-C07 — Rectangular Gram-spectrum bridge.** The nonzero eigenvalues of `A†A` and `AA†` agree
   with multiplicity; equivalently, their sorted eigenvalue lists agree through the common rank
   and are zero beyond it.
 - **PD-C08 — Adjoint invariance of singular values.** `A` and `A†` have the same singular values.
+
+- **PD-C28 — Modulus singular values.** For a map between finite-dimensional Hilbert
+  spaces over `RCLike 𝕜`, the modulus and the original map have the same zero-padded
+  singular-value sequence: `(LinearMap.operatorAbs T).singularValues = T.singularValues`.
 
 **Singular system.**
 
@@ -505,7 +514,7 @@ A B A = A     B A B = B     (A B)† = A B     (B A)† = B A
 - **PD-C26 — Surjective case.** If `A` is surjective, then `AA⁺ = I`.
 - **PD-C27 — Invertible case.** If `A` is invertible, then `A⁺ = A⁻¹`.
 
-**Milestone C1 — Gram spectra and singular values.** `PD-C01`–`PD-C02`, `PD-C07`–`PD-C08`.
+**Milestone C1 — Gram spectra and singular values.** `PD-C07`–`PD-C08`, `PD-C28`.
 
 **Milestone C2 — singular expansion.** `PD-C09`–`PD-C18`.
 
@@ -515,19 +524,22 @@ A B A = A     B A B = B     (A B)† = A B     (B A)† = B A
 
 ### Part A — the functional calculus, the positive square root, and the modulus
 
-**Acceptance examples.** Exercise `PD-A10` on an infinite-dimensional real Hilbert space;
-exercise `PD-A12`, `PD-A14`, `PD-A20`, and `PD-A29` on diagonal finite-dimensional operators;
-exercise `PD-A53` on a rank-one perturbation of the identity.
+**Acceptance examples.** Instantiate the scalar structures and calculus of `PD-A10` over
+an abstract `RCLike` field and at `ℝ` and `ℂ`, including an infinite-dimensional real
+Hilbert space. Form the rectangular modulus in a downstream module using the Hilbert-space
+and completeness hypotheses alone, and check `PD-A48` with the locally selected scalar
+structures. Exercise `PD-A12`, `PD-A14`, `PD-A20`, and `PD-A29` on diagonal finite-dimensional
+operators; exercise `PD-A53` on a rank-one perturbation of the identity.
 
 ### Part B — polar decomposition and partial isometries
 
 **Acceptance criteria.** Exercise `PD-B22` and `PD-B23`–`PD-B40` on rectangular complete
-`RCLike` Hilbert spaces; exercise `PD-A48` over `ℂ`; exercise the predicate agreements
+`RCLike` Hilbert spaces; exercise `PD-A48` over `RCLike`; exercise the predicate agreements
 `PD-B03` and `PD-B05`; exercise the initial-space identity `PD-B29`.
 
 ### Part C — singular values and the singular system
 
-**Acceptance criteria.** Exercise the accessor `PD-C01`–`PD-C02`, the intrinsic singular
+**Acceptance criteria.** Exercise the modulus identity `PD-C28`, the intrinsic singular
 system `PD-C09`–`PD-C18`, the Moore–Penrose characterization `PD-C19`–`PD-C24`, and the zero
 singular-value case in `PD-C12`.
 

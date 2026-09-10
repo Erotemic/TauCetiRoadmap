@@ -318,41 +318,23 @@ measure and its half-line form-bound projections.
 - **SA-B36 — Multiplication-operator model.** For a multiplication operator, the bounded
   Borel calculus acts by multiplication by the symbol.
 
-#### Generic measure-theoretic support
-
-Compact-infimum measurability and Helly selection provide the measure-theoretic compactness
-tools used by spectral constructions. These statements serve operator-valued applications
-through their scalar measures.
-
-- **SA-B37 — Measurability of compact infima.** Let `S` be a nonempty compact subset of a
-  pseudometric space and `F : Y → Ω → ℝ`. If `y ↦ F y ω` is continuous on `S` for every `ω`,
-  and `ω ↦ F y ω` is measurable for every `y ∈ S`, then
-  `ω ↦ inf {F y ω : y ∈ S}` is measurable.
-- **SA-B38 — Helly selection.** Let `Fₙ : ℝ → ℝ` be monotone functions with
-  `0 ≤ Fₙ(x) ≤ M` for every `n,x`, where `M ≥ 0`. There exist a strictly increasing
-  `φ : ℕ → ℕ` and a monotone `G : ℝ → ℝ`, with `0 ≤ G(x) ≤ M`, such that
-  `F_{φ(k)}(q) → G(q)` for every rational `q` and `F_{φ(k)}(x) → G(x)` at every continuity
-  point `x` of `G`.
-- **SA-B39 — Stieltjes measure of a Helly limit.** For monotone `G : ℝ → ℝ`, let `G⁺` be its
-  right-continuous Stieltjes regularization and let `μ_G` be the associated Stieltjes measure.
-  Then `μ_G((a,b]) = ENNReal.ofReal (G⁺(b)-G⁺(a))`; at continuity points `a,b` of `G`, this
-  equals `ENNReal.ofReal (G(b)-G(a))`.
-
 **Milestone B1 — bounded Borel homomorphism.** `SA-B01`–`SA-B13`.
 
 **Milestone B2 — projection-valued measures.** `SA-B14`–`SA-B33`.
 
-**Milestone B3 — uniqueness, bounded spectral theorem, and measure compactness.** `SA-B34`–`SA-B39`.
+**Milestone B3 — uniqueness and the bounded spectral theorem.** `SA-B34`–`SA-B36`.
 
 ### Part C — closed operators on `LinearPMap`: graphs, constructions, form bounds
 
 Part C supplies the domain geometry and perturbation vocabulary for partial operators over
-`[RCLike 𝕜]`. The bounded restriction/form-bound bridge consumes the reducing-subspace API
-`OG-14`–`OG-18`.
+`[RCLike 𝕜]`. The bounded restriction/form-bound bridge uses Mathlib's
+`Module.End.invtSubmodule`, `LinearMap.IsSymmetric.restrict_invariant`, and
+`LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule`, together with the
+reducing-subspace definition `OG-15` and projected-subspace completeness `OG-18`.
 
 **Objects.** Domain relations, reducing restrictions, transport constructions, graph norms
 and graph cores, relative boundedness, perturbations, real spectral predicates, rectangular
-Sylvester equations, bounded inverses, and quadratic-form bounds.
+Sylvester equations, and quadratic-form bounds.
 
 #### Domain relations and reducing restrictions
 
@@ -421,8 +403,10 @@ these constructions.
   `(UAU⁻¹)x = U(A(U⁻¹x))`.
 - **SA-C28 — Self-adjointness under unitary conjugation.** Unitary conjugation preserves
   self-adjointness.
-- **SA-C29 — Direct sum of partial operators.** Define `A ⊕ B` on the product Hilbert
-  space with the product of the two operator domains.
+- **SA-C29 — Direct sum of partial operators.** Define `A ⊕ B` on the Hilbert
+  product `WithLp 2 (E × F)`, with domain given by the product of the two operator domains
+  transported through the `WithLp` identification. The notation `(x,y)` in `SA-C30` and
+  `SA-C31` uses this identification.
 - **SA-C30 — Direct-sum domain.** A pair `(x,y)` lies in `dom(A⊕B)` exactly when
   `x ∈ dom A` and `y ∈ dom B`.
 - **SA-C31 — Direct-sum action.** On the direct-sum domain,
@@ -492,29 +476,20 @@ bounded and Kato–Rellich self-adjointness theorems.
 - **SA-C56 — Bounded self-adjoint operators as total partial operators.** A bounded
   self-adjoint operator, viewed as a partial operator on the full space, is self-adjoint.
 
-#### Real spectral predicates and shifted inverse data
+#### Real spectral separation
 
-Real shifted-inverse data turns lower bounds for `A-c` into bounded inverse information. The
-associated real resolvent and separation predicates provide the quantitative hypotheses used by
-spectral perturbation statements.
+The shared `TauCeti.LinearPMap` core in `SA-D01`–`SA-D02` supplies the resolvent and spectrum.
+For a partial operator over `RCLike 𝕜`, its real spectral points are the preimage of
+`TauCeti.LinearPMap.spectrum A` under `ℝ → 𝕜`. Real spectral separation uses subsets of
+this preimage. The shared core precedes `SA-C62`–`SA-C65`.
 
-- **SA-C57 — Left shifted-inverse bound.** Define the data of a bounded left inverse for a
-  real shift `A-c` together with an explicit inverse-norm bound.
-- **SA-C58 — Two-sided shifted-inverse bound.** Define the corresponding bounded two-sided
-  inverse data, including transport of the inverse range into `dom A`.
-- **SA-C59 — Two-sided data imply left-sided data.** Every two-sided shifted-inverse bound
-  supplies a left shifted-inverse bound with the same constants.
-- **SA-C60 — Real resolvent set.** Define the real shifts admitting bounded two-sided
-  inverse data.
-- **SA-C61 — Real spectrum.** Define the real spectrum as the complement of the real
-  resolvent set.
 - **SA-C62 — Separation of real spectral sets.** Define separation by a positive lower
   bound on pairwise distances between specified subsets of the real spectra of two partial
   operators.
 - **SA-C63 — Symmetry of real spectral separation.** Swapping the two operators and
   spectral sets preserves the separation condition.
-- **SA-C64 — Monotonicity in the gap.** Decreasing the requested gap preserves spectral-set
-  separation.
+- **SA-C64 — Monotonicity in the gap.** Separation by `δ > 0` implies separation by
+  every `δ'` with `0 < δ' ≤ δ`.
 - **SA-C65 — Monotonicity in the spectral sets.** Passing to smaller selected spectral sets
   preserves separation.
 
@@ -537,12 +512,6 @@ quantitative Sylvester estimates.
 - **SA-C71 — Subtraction of Sylvester equations.** Solutions are closed under subtraction.
 - **SA-C72 — Scalar multiplication of Sylvester equations.** Solutions are closed under
   scalar multiplication.
-- **SA-C73 — Bounded everywhere inverse.** Define a bounded inverse for a partial operator
-  whose range lies in the operator domain and which satisfies both inverse laws.
-- **SA-C74 — Injectivity from a bounded everywhere inverse.** A partial operator with the
-  data of `SA-C73` is injective on its domain.
-- **SA-C75 — Surjectivity from a bounded everywhere inverse.** A partial operator with the
-  data of `SA-C73` is surjective onto the ambient space.
 
 #### Quadratic-form bounds
 
@@ -575,7 +544,8 @@ form inequalities.
 
 **Milestone C1 — domain geometry and transport.** `SA-C01`–`SA-C43`.
 
-**Milestone C2 — perturbation and Sylvester vocabulary.** `SA-C44`–`SA-C75`.
+**Milestone C2 — perturbation, spectral separation, and Sylvester vocabulary.**
+`SA-C44`–`SA-C56`, `SA-C62`–`SA-C72`.
 
 **Milestone C3 — form-bound vocabulary and spectral bridges.** `SA-C76`–`SA-C85`.
 
@@ -597,14 +567,15 @@ self-adjoint estimates.
 - **SA-D01 — Resolvent core of a partial operator.** Generalize the existing
   `TauCeti.LinearPMap` resolvent API in place from real scalars to a nontrivially normed scalar
   field, preserving the declaration names, the `zI-A` convention, and existing real-scalar
-  callers. The generalized surface includes `IsResolventAt` and its bijectivity lemmas,
+  callers. The generalized API includes `IsResolventAt` and its bijectivity lemmas,
   `resolventSet`, the named `resolvent` and inverse/domain laws,
   `eq_of_le_of_mem_resolventSet`, operator/resolvent commutation, the first resolvent identity
   and resolvent commutation, Neumann perturbation and openness, and the bounded-operator
   bridges. At `𝕜 = ℝ` these specialize to the current public API; the scalar-generic Neumann
   hypothesis uses `‖μ-λ‖`, which is `|μ-λ|` over `ℝ`.
-- **SA-D02 — Spectrum of a partial operator.** In the setting of `SA-D01`, define the spectrum
-  as the complement of the resolvent set.
+- **SA-D02 — Spectrum of a partial operator.** In the setting of `SA-D01`, define
+  `TauCeti.LinearPMap.spectrum A` as the complement of `TauCeti.LinearPMap.resolventSet A`,
+  in the same namespace and with dot notation `A.spectrum`.
 - **SA-D03 — Named resolvent.** Over a nontrivially normed field on a normed space, at `z` in the
   resolvent set, `TauCeti.LinearPMap.resolvent A z` is the bounded two-sided inverse `R(z)`.
 - **SA-D04 — Uniqueness of the resolvent.** Two bounded operators satisfying the two-sided
@@ -647,9 +618,10 @@ bounds.
   `R(z)†=R(conj z)`.
 - **SA-D21 — Real resolvents are self-adjoint.** At a real resolvent point of self-adjoint
   `A`, the bounded operator `R(z)` is self-adjoint.
-- **SA-D22 — Real-point resolvent from a lower bound.** If a real shift `z` satisfies
-  `c‖x‖ ≤ ‖(A-z)x‖` on the domain for some `c>0`, the closed-range argument produces a
-  bounded resolvent at `z` with norm at most `c⁻¹`.
+- **SA-D22 — Real-point resolvent from a lower bound.** Let `A` be a self-adjoint
+  partial operator on a complete Hilbert space over `RCLike 𝕜`, and let `z : ℝ`.
+  If `c > 0` and `c‖x‖ ≤ ‖Ax-zx‖` for every `x ∈ dom A`, then `z` belongs to
+  the resolvent set and its resolvent has norm at most `c⁻¹`.
 - **SA-D23 — Shifted inverse across a spectral gap.** If the spectrum is disjoint from
   `(c-s,c+s)` and `s>0`, then the shifted operator `A-c` has a bounded two-sided inverse
   with norm at most `s⁻¹`.
@@ -883,17 +855,18 @@ generated-group compatibility is `SA-E46`; multiplication-operator spectral proj
 **Internal.** Part B depends only on Mathlib. Part D begins with the in-place scalar
 generalization of Tau Ceti's existing `TauCeti.LinearPMap` resolvent core; its remaining
 obligations use that generalized core. Part A uses Mathlib together with the
-`OneParameterSemigroups` bridge in `SA-A15`–`SA-A16`. Part C is independent of them and consumes
-[`OrthogonalGeometry`](../OrthogonalGeometry/README.md). Part E is the confluence
+`OneParameterSemigroups` bridge in `SA-A15`–`SA-A16`. Part C consumes
+[`OrthogonalGeometry`](../OrthogonalGeometry/README.md); its real spectral-separation targets
+`SA-C62`–`SA-C65` also use the shared core `SA-D01`–`SA-D02`. Part E is the confluence
 and needs exactly A + B + D — the Cayley transform and resolvent bounds from D, the Borel
 calculus and `ProjValMeasure` from B, the unitary-group vocabulary, von Neumann criterion and
 Duhamel estimate from A. It does not consume Part C: the shared carrier of C, D and E is
 `LinearPMap` itself. Within Part E the Yosida and maximality material precedes the
 construction.
 
-**External.** [`OrthogonalGeometry`](../OrthogonalGeometry/README.md), for the reducing
-subspaces and the restriction of a symmetric operator that Part C's form bounds are stated
-over.
+**External.** [`OrthogonalGeometry`](../OrthogonalGeometry/README.md) supplies the
+reducing-subspace definition and completeness of projected subspaces. Mathlib supplies invariant
+subspaces and symmetric restrictions for Part C's form bounds.
 
 The [one-parameter semigroups](https://github.com/TauCetiProject/TauCetiRoadmap/blob/main/TauCetiRoadmap/OneParameterSemigroups/README.md)
 roadmap owns the general dynamical layer: strongly continuous semigroups, their generators,

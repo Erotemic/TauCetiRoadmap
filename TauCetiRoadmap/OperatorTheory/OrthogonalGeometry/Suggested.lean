@@ -68,10 +68,7 @@ theorem orthogonalFamily_of_pairwise_inner_eq_zero {ι : Type*} {f : ι → E}
 
 end TauCetiRoadmap.OrthogonalGeometry
 
-/-! ## Reducing subspaces
-
-Both facts are about a Mathlib carrier and are written in that carrier's namespace, so that
-each supports dot notation on the object it is about. -/
+/-! ## Completeness of projected subspaces -/
 
 namespace Submodule
 
@@ -83,14 +80,3 @@ theorem isComplete_coe_of_hasOrthogonalProjection {𝕜 E : Type*} [RCLike 𝕜]
     [U.HasOrthogonalProjection] : IsComplete (U : Set E) := sorry
 
 end Submodule
-
-namespace ContinuousLinearMap
-
-/-- Restricting a symmetric operator to an invariant subspace preserves symmetry.
-
-Roadmap: `OG-17`. -/
-theorem IsSymmetric.restrict_of_invariant {𝕜 E : Type*} [RCLike 𝕜]
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {A : E →L[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : ∀ x ∈ U, A x ∈ U) : (A.restrict hU).IsSymmetric := sorry
-
-end ContinuousLinearMap

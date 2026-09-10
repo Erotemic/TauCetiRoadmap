@@ -128,7 +128,7 @@ projection, sorted decreasingly and padded by zeros beyond the finite rank.
 Roadmap: `PA-B12`. -/
 noncomputable def principalCosines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (cosThetaMap U V).singularValues
+  (cosThetaMap U V : E →ₗ[𝕜] E).singularValues
 
 /-- The subspace-level principal cosines agree with the family-level ones on
 spans: the theorem that makes the Part B definition well-named.
@@ -210,7 +210,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 Roadmap: `PA-B13`. -/
 noncomputable def principalSines (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (sinThetaMap U V).singularValues
+  (sinThetaMap U V : E →ₗ[𝕜] E).singularValues
 
 /-- Principal angles obtained by applying `arcsin` to the principal sines.
 
@@ -308,6 +308,24 @@ theorem mem_restrictedPointSpectrum {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E
 Roadmap: `PA-C16`. -/
 def PointSpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
   restrictedPointSpectrum A U ⊆ Ω
+
+/-- Spectral containment gives an upper form bound on an invariant subspace.
+
+Roadmap: `PA-C20`. -/
+theorem upperFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} (hU : ∀ x ∈ U, A x ∈ U) {a : ℝ}
+    (hSpec : PointSpectrumIn A U (Set.Iic a)) :
+    ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2 := by
+  sorry
+
+/-- Spectral containment gives a lower form bound on an invariant subspace.
+
+Roadmap: `PA-C22`. -/
+theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} (hU : ∀ x ∈ U, A x ∈ U) {a : ℝ}
+    (hSpec : PointSpectrumIn A U (Set.Ici a)) :
+    ∀ x ∈ U, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
+  sorry
 
 /-- The point-spectral eigenspan selected by a real set.
 

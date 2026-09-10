@@ -41,21 +41,13 @@ section PointInternalGap
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
-/-- **Absolute separation between the two diagonal blocks of one operator.**
-
-The member of the separation family in which both spectra come from the same `A`, on `U`
-and `Uᗮ`. It carries its own name because the theorems that consume it are a different
-family — the `sin Θ` and `sin 2Θ` results and the disjoint-spectrum Sylvester estimate —
-and because it is not enough for the sharp `tan 2Θ` theorem, where interlacing spectra
-can satisfy absolute separation while an off-diagonal perturbation produces a quarter turn.
-
-A statistics-facing synonym for this predicate is not wanted: the population/sample
-distinction belongs in the names of the theorems that use it, not in a fourth name for the
-same separation.
+/-- Invariance of `U` and separation between the restricted point spectra on `U`
+and its orthogonal complement. For symmetric `A`, both subspaces are invariant.
 
 Roadmap: `SSP-S01`. -/
 def PointInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
-  PrincipalAngles.PointSpectraSeparated A U A Uᗮ δ
+  (∀ x ∈ U, A x ∈ U) ∧
+    PrincipalAngles.PointSpectraSeparated A U A Uᗮ δ
 
 
 end PointInternalGap
@@ -205,7 +197,7 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
-    (hdisj : Disjoint (SelfAdjointSpectralTheory.spectrum A) (SelfAdjointSpectralTheory.spectrum B)) :
+    (hdisj : Disjoint (TauCeti.LinearPMap.spectrum A) (TauCeti.LinearPMap.spectrum B)) :
     X = 0 := by
   sorry
 
@@ -247,7 +239,7 @@ unitarily invariant norm**, under the interval/exterior gap.
 
 Roadmap: `SSP-C18`. -/
 theorem sinTheta_perturbation_le
-    (N : Majorization.SquareUnitarilyInvariantSeminorm 𝕜 E)
+    (N : Majorization.UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
@@ -280,7 +272,7 @@ every square unitarily invariant norm.
 
 Roadmap: `SSP-C23`. -/
 theorem sinTheta_perturbation_le_of_spectralDistance
-    (N : Majorization.SquareUnitarilyInvariantSeminorm 𝕜 E)
+    (N : Majorization.UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]

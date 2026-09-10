@@ -37,15 +37,14 @@ Suggested home: `TauCeti/Analysis/Semigroups/`, `TauCeti/Analysis/CompletelyMono
   theorem on Hilbert space is a milestone of
   [`OperatorTheory/SelfAdjointSpectralTheory`](../OperatorTheory/SelfAdjointSpectralTheory/README.md),
   which is cited for it rather than specifying it twice.
-- **Generators are unbounded.** The generator carries a **dense domain**; model it as a
-  `LinearPMap` / submodule, never a total operator. Mathlib's `resolvent`/`spectrum` are
-  **Banach-algebra-only**, so an unbounded generator needs its **own** resolvent notion
-  (`λ ∈ ρ(A)` iff `λ·I − A : D(A) → X` is a bijection with bounded inverse); add a **bridge
-  lemma** identifying it with Mathlib's `resolvent` in the bounded (`domain = ⊤`) case, rather
-  than duplicating effort. This roadmap owns the general generator and its resolvent;
+- **Generators are unbounded.** The generator is a densely defined `LinearPMap`. Its resolvent
+  uses the shared `TauCeti.LinearPMap` core, with `λ ∈ ρ(A)` when
+  `λ I - A : D(A) → X` has a bounded two-sided inverse. The bounded-operator bridge
+  identifies this inverse with Mathlib's Banach-algebra resolvent. This roadmap owns the general
+  generator theory and its resolvent estimates;
   [`OperatorTheory/SelfAdjointSpectralTheory`](../OperatorTheory/SelfAdjointSpectralTheory/README.md)
-  owns the self-adjoint `LinearPMap` resolvent set and the imaginary-shift Yosida
-  approximants, and the shared resolvent definition is stated once.
+  owns the scalar generalization of the shared resolvent core, the self-adjoint estimates, and
+  the imaginary-shift Yosida approximants.
 - **Bochner at its natural generality.** A continuous positive-definite function lives on a
   **general finite-dimensional real inner-product space** `V` (so `ℝ²` as `ℝ × ℝ`, or any
   finite-dim space, is covered) — *not* on hard-coded `Fin d` coordinates. State Bochner for
@@ -204,7 +203,7 @@ completely monotone functions from these.
 finite-dimensional real inner-product space `V` (involution `a⋆ = −a`), and on `ℝ≥0 × V`,
 where the **product `StarAddMonoid` automatically supplies the BCR involution** `(t,a)⋆ = (t,−a)`
 (`ℝ≥0` carries the trivial involution, `V` the negation) — no hand-coding. `IsSemigroupGroupPD`
-is then this predicate on `ℝ≥0 × V`. (Stretch: an LCA group.) The condition itself: for every
+is then this predicate on `ℝ≥0 × V`. The condition itself: for every
 finite family `(cᵢ, aᵢ)`, `Σ_{i,j} cᵢ · conj(cⱼ) · F(aᵢ + aⱼ⋆) ≥ 0` — note the **involution**
 `aⱼ⋆`, not the group form `F(aᵢ − aⱼ)`; this is exactly what makes the product involution
 `(t,a)⋆ = (t,−a)` yield the intended BCR notion.
@@ -232,7 +231,7 @@ corollary.
 positive-definiteness is only for *matrices* / quadratic forms — there is no
 continuous-positive-definite-*function* notion, and no Bochner representation. So this is
 build-here. Two routes: (i) the positive linear functional `f ↦ ∫ f̂ · φ` + Riesz–Markov, or
-(ii) `charFun` + Lévy/Prokhorov tightness. **Stretch:** an LCA group via Pontryagin duality.
+(ii) `charFun` + Lévy/Prokhorov tightness.
 
 **Milestone 2 — BCR semigroup–Bochner (Berg–Christensen–Ressel 4.1.13).** A bounded
 continuous positive-definite function on the involutive semigroup `[0,∞) × V` is the
@@ -278,6 +277,6 @@ uniqueness is independent and portable early.
   Gruyter, 2nd ed. 2012) — completely monotone / Bernstein functions and their structure.
 - W. Rudin, *Fourier Analysis on Groups* (1962); G. Folland, *A Course in Abstract Harmonic
   Analysis* (2nd ed. 2016) — Bochner's theorem, positive-definite functions, Pontryagin
-  duality (the stretch generality).
+  duality and positive-definite functions.
 - C. Berg, J. P. R. Christensen, P. Ressel, *Harmonic Analysis on Semigroups* (GTM 100, 1984)
   — Theorem 4.1.13, positive-definite functions on involutive semigroups.

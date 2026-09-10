@@ -10,7 +10,7 @@ scope and dependencies.
 - bounded operators between Hilbert spaces, over `ℝ` and `ℂ` uniformly where the
   mathematics permits;
 - the finite-dimensional self-adjoint functional calculus over `RCLike`, the continuous
-  functional calculus for bounded self-adjoint operators on complete real Hilbert spaces,
+  functional calculus for bounded self-adjoint operators on complete `RCLike` Hilbert spaces,
   positive square roots, the operator modulus, polar decomposition, and partial isometries;
 - singular systems and Moore–Penrose inverses;
 - Gram operators, orthogonal projections, and the geometry of spectral subspaces;
@@ -29,7 +29,7 @@ scope and dependencies.
 
 - [**Polar decomposition**](PolarDecomposition/README.md) — the finite self-adjoint
   functional calculus over `RCLike`, the continuous functional calculus for bounded
-  self-adjoint operators on complete real Hilbert spaces, the positive square root and the
+  self-adjoint operators on complete `RCLike` Hilbert spaces, the positive square root and the
   operator modulus, polar decomposition and partial isometries, singular systems and the
   Moore–Penrose inverse.
 - [**Orthogonal geometry**](OrthogonalGeometry/README.md) — Gram rigidity, the coordinate
@@ -67,7 +67,7 @@ scope and dependencies.
 | `OrthogonalGeometry`           | Mathlib                                                                                                    |
 | `Majorization`                 | `PolarDecomposition`, `OrthogonalGeometry`                                                                 |
 | `PrincipalAngles`              | `PolarDecomposition`, `OrthogonalGeometry`, `Majorization`                                                 |
-| `SelfAdjointSpectralTheory`    | `OrthogonalGeometry`                                                                                       |
+| `SelfAdjointSpectralTheory`    | `OrthogonalGeometry`, `OneParameterSemigroups` |
 | `OperatorIdeals`               | `PolarDecomposition`, `Majorization`                                                                       |
 | `MatrixSpectralStatistics`     | `PolarDecomposition`                                                                                       |
 | `SpectralSubspacePerturbation` | `PolarDecomposition`, `Majorization`, `PrincipalAngles`, `SelfAdjointSpectralTheory`                       |
@@ -83,7 +83,8 @@ stated against.
 The Haagerup–Zsidó kernel in `SpectralSubspacePerturbation` Part A and the unitary-group
 and bounded-Borel-calculus layers in `SelfAdjointSpectralTheory` Parts A and B depend only
 on Mathlib within this family. Part D generalizes Tau Ceti's `LinearPMap` resolvent core to
-the scalar fields used by the self-adjoint theory.
+the scalar fields used by the self-adjoint theory. The unitary-group restriction and generator
+relation `SA-A15`–`SA-A16` also consume `OneParameterSemigroups`.
 
 ## Ownership boundaries
 
@@ -93,8 +94,9 @@ Between roadmaps in this family:
   rectangular Frobenius seminorm that `OperatorIdeals` identifies `S₂` with. The
   perturbation roadmap states its estimates in that shared vocabulary.
 - **The operator modulus and the polar decomposition** belong to `PolarDecomposition`.
-- **Gram rigidity, the coordinate isometry, projection geometry, orthogonal series and
-  reducing subspaces** belong to `OrthogonalGeometry`.
+- **Gram rigidity, coordinate isometries, the orthogonal-family constructor, projected-subspace
+  completeness, and the reducing-subspace definition** belong to `OrthogonalGeometry`.
+  Invariant subspaces, symmetric restrictions, and orthogonal-series estimates use Mathlib.
 - **The projection gap, finite-dimensional point-spectral subspaces/projectors, the restricted point
   spectrum, the separation predicates and `sinThetaMap`** belong to `PrincipalAngles`. PVM spectral
   projections and their ranges belong to `SelfAdjointSpectralTheory`. `PointInternalGap`, the member
@@ -119,8 +121,8 @@ With roadmaps outside this family:
   theory, the self-adjoint and unitary specialization, and Stone's theorem as the bridge
   between the two developments. Both developments use Mathlib `LinearPMap` for unbounded
   operators and share the `TauCeti.LinearPMap` resolvent vocabulary and the `zI-A` convention.
-  The self-adjoint specialization adds the partial-operator spectrum, resolvent estimates,
-  Cayley transform, and spectral theory.
+  The shared namespace also contains the partial-operator spectrum. The self-adjoint specialization
+  adds resolvent estimates, the Cayley transform, and spectral theory.
 
 ## Acknowledgements
 

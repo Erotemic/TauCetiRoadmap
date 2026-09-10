@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib
+import TauCeti.Analysis.Semigroups.Basic
 import TauCetiRoadmap.OperatorTheory.OrthogonalGeometry.Suggested
 
 /-!
@@ -12,7 +13,6 @@ import TauCetiRoadmap.OperatorTheory.OrthogonalGeometry.Suggested
 suggested Lean forms for selected labeled obligations. The roadmap is complete when the
 obligations in `README.md` are complete. `sorry` records target signatures in this human-owned
 roadmap library.
-
 
 The representation decision runs through every signature: an unbounded operator is a Mathlib
 `LinearPMap` (`H →ₗ.[𝕜] H`), and closedness, dense domain and self-adjointness are hypotheses
@@ -26,6 +26,13 @@ These declarations intentionally use their eventual upstream names: an implement
 generalize the existing `TauCeti.LinearPMap` declarations, not add a parallel resolvent API.
 Specializing `𝕜 := ℝ` must preserve the existing public API and existing callers.  The
 `lambda • I - A` convention is unchanged.
+
+Until this scalar generalization is implemented upstream, this prototype and its importers
+cannot import `TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded` or any module importing
+it transitively, including `TauCeti.Analysis.Semigroups.Resolvent.Identity` and
+`TauCeti.Analysis.Semigroups.Defs`. Those imports would redeclare the names below.
+The semigroup conversion uses `TauCeti.Analysis.Semigroups.Basic`, which does not import
+the resolvent core.
 -/
 
 namespace TauCeti
@@ -66,6 +73,12 @@ theorem IsResolventAt.smul_sub_bijective (h : IsResolventAt A lambda R) :
 Roadmap: `SA-D01`. -/
 def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   {lambda | ∃ R : E →L[𝕜] E, IsResolventAt A lambda R}
+
+/-- The spectrum of a partial linear map, defined as the complement of its resolvent set.
+
+Roadmap: `SA-D02`. -/
+def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
+  (resolventSet A)ᶜ
 
 /-- Roadmap: `SA-D01`. -/
 theorem mem_resolventSet_iff :
@@ -222,6 +235,29 @@ structure OneParameterUnitaryGroup (H : Type*) [NormedAddCommGroup H]
   identity : U 0 = ContinuousLinearMap.id ℂ H
   strong_continuous : ∀ ψ : H, Continuous fun t : ℝ => U t ψ
 
+/-- Restriction to nonnegative time on the underlying real Banach space.
+
+Roadmap: `SA-A15`. -/
+noncomputable def OneParameterUnitaryGroup.toSemigroup (U : OneParameterUnitaryGroup H) :
+    TauCeti.Semigroups.StronglyContinuousSemigroup H where
+  toFun t := (U.U (t : ℝ)).restrictScalars ℝ
+  map_zero' := by sorry
+  map_add' := by sorry
+  continuousAt_zero' := by sorry
+
+/-- The semigroup restriction has the same pointwise action as the unitary group.
+
+Roadmap: `SA-A15`. -/
+@[simp] theorem OneParameterUnitaryGroup.toSemigroup_apply (U : OneParameterUnitaryGroup H)
+    (t : NNReal) (x : H) : U.toSemigroup t x = U.U (t : ℝ) x := rfl
+
+/-- Unitarity gives contractivity of the real semigroup restriction.
+
+Roadmap: `SA-A15`. -/
+theorem OneParameterUnitaryGroup.norm_toSemigroup_le (U : OneParameterUnitaryGroup H)
+    (t : NNReal) : ‖U.toSemigroup t‖ ≤ 1 := by
+  sorry
+
 /-- The generator: a `LinearPMap` defined on exactly the vectors where the
 difference quotient converges.
 
@@ -330,7 +366,7 @@ structure ProjValMeasure (X : Type*) [MeasurableSpace X] (H : Type*)
     proj B₁ hB₁ * proj B₂ hB₂ = proj (B₁ ∩ B₂) (hB₁.inter hB₂)
   strongly_countably_additive :
     ∀ (B : ℕ → Set X) (hB : ∀ n, MeasurableSet (B n))
-      (hdisj : Pairwise fun i j => Disjoint (B i) (B j))
+      (_hdisj : Pairwise fun i j => Disjoint (B i) (B j))
       (hUnion : MeasurableSet (⋃ n, B n)) (ξ : H),
       HasSum (fun n => proj (B n) (hB n) ξ) (proj (⋃ n, B n) hUnion ξ)
 
@@ -496,20 +532,6 @@ The scalar-generic `TauCeti.LinearPMap` target API above retains the landed real
 and `lambda • I - A` convention. The remaining Part D targets extend its algebraic and
 self-adjoint theory. -/
 
-section ResolventDefinitions
-
-variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-
-/-- The spectrum of a partial linear map, defined as the complement of its resolvent set.
-
-Roadmap: `SA-D02`. -/
-def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
-  (TauCeti.LinearPMap.resolventSet A)ᶜ
-
-end ResolventDefinitions
-
-
 section ComplexResolvent
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -528,6 +550,24 @@ theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoi
     ‖TauCeti.LinearPMap.resolvent A z‖ ≤ |z.im|⁻¹ := sorry
 
 end ComplexResolvent
+
+section RealPointResolvent
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+
+/-- A positive lower bound at a real shift of a self-adjoint partial operator gives a resolvent.
+
+Roadmap: `SA-D22`. -/
+theorem mem_resolventSet_and_norm_le_of_lower_bound {A : E →ₗ.[𝕜] E}
+    (hA : IsSelfAdjoint A) {z c : ℝ} (hc : 0 < c)
+    (hbound : ∀ x : A.domain,
+      c * ‖(x : E)‖ ≤ ‖A x - (z : 𝕜) • (x : E)‖) :
+    (z : 𝕜) ∈ TauCeti.LinearPMap.resolventSet A ∧
+      ‖TauCeti.LinearPMap.resolvent A (z : 𝕜)‖ ≤ c⁻¹ := by
+  sorry
+
+end RealPointResolvent
 
 /-! ## Part E -- the spectral measure of an unbounded self-adjoint operator -/
 

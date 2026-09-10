@@ -211,22 +211,31 @@ concentration.
   mean `M_{kl}`, the family `(Y_i)` is pairwise independent, all centered second moments
   `∫|Y_i-M_{kl}|²` are equal, and their common value is at most `v`. Then
   `∫(M̂_{kl}-M_{kl})² ≤ v/r`.
-- **MSS-C18 — Entrywise concentration.** If every entry of `Ŝ-A` has mean square at most `v`, then
+- **MSS-C18 — Entrywise concentration.** On a probability space, let `Ŝ` be a real
+  random `n × n` matrix and `A` a fixed real matrix. Assume every entry of `Ŝ` is
+  measurable, every squared deviation `(Ŝ_{kl}-A_{kl})²` is integrable, and every
+  squared-deviation integral is at most `v`. Then
   `P{∃k,l, η<|Ŝ_{kl}-A_{kl}|}≤ENNReal.ofReal(n²v/η²)` for `η>0`.
-- **MSS-C19 — Measurability of the entrywise deviation event.** If every entry of `Ŝ` is
-  measurable, then `{ω | ∃k,l, η<|Ŝ_{kl}(ω)-A_{kl}|}` is measurable.
-- **MSS-C20 — Eigenvalue concentration.** For Hermitian `Ŝ(ω)` and Hermitian `A`, with probability
-  at least `1-ENNReal.ofReal(n²v/η²)`, every sorted eigenvalue differs by at most `nη`.
+- **MSS-C19 — Measurability of the entrywise deviation event.** If every entry of
+  `Ŝ` is measurable, then `{ω | ∃k,l, η<|Ŝ_{kl}(ω)-A_{kl}|}` is measurable.
+  In particular, the event in `MSS-C18` is measurable.
+- **MSS-C20 — Eigenvalue concentration.** Under all hypotheses of `MSS-C18`, with
+  `Ŝ(ω)` and `A` symmetric, the probability that every sorted eigenvalue differs by at
+  most `nη` is at least `1-ENNReal.ofReal(n²v/η²)`.
 - **MSS-C21 — One-sided eigenvalue floor.** Under the hypotheses of `MSS-C20`, with the same
   probability every sorted eigenvalue of `Ŝ(ω)` is at least the corresponding eigenvalue of `A`
   minus `nη`.
-- **MSS-C22 — Operator-norm concentration.** Under the entrywise second-moment hypotheses, with
+- **MSS-C22 — Operator-norm concentration.** Under all hypotheses of `MSS-C18`, with
   probability at least `1-ENNReal.ofReal(n²v/η²)`,
   `‖(Ŝ(ω)-A)x‖≤nη‖x‖` for every Euclidean vector `x`.
-- **MSS-C23 — Empirical-second-moment eigenvalue floor.** Applying `MSS-C21` to `M̂` gives the
-  corresponding high-probability eigenvalue lower bound for an empirical second-moment matrix;
-  in particular, for `0 < c` and `0 < d`, taking `η=c/(2d)` keeps a population eigenvalue bounded
-  below by `c` above `c/2` on the resulting event.
+- **MSS-C23 — Empirical-second-moment eigenvalue floor.** On a probability space, let
+  `r > 0` and suppose `MSS-C17` holds for every coordinate pair with the same bound `v`.
+  Assume every entry of `M̂` is measurable and every squared entrywise deviation from the
+  population second moment is integrable. Applying `MSS-C21` with the
+  entrywise moment bound `v/r` gives the corresponding eigenvalue lower bound. For matrix
+  dimension `d > 0` and `c > 0`, take `η=c/(2d)`. With probability at least
+  `1-ENNReal.ofReal(4d⁴v/(rc²))`, every empirical eigenvalue whose population eigenvalue
+  is at least `c` is at least `c/2`.
 
 **Milestone C1 — scalar and vector sample-mean identities.** `MSS-C01`–`MSS-C05`.
 

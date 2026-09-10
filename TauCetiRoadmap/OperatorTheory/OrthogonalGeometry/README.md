@@ -15,8 +15,7 @@ infrastructure used by
 [`Majorization`](../Majorization/README.md), [`PrincipalAngles`](../PrincipalAngles/README.md), and
 [`SelfAdjointSpectralTheory`](../SelfAdjointSpectralTheory/README.md).
 
-Suggested home: `TauCeti/Analysis/InnerProductSpace/`, with the subspace-equality isometry lemma in
-`TauCeti/Analysis/Normed/Operator/`.
+Suggested home: `TauCeti/Analysis/InnerProductSpace/`.
 
 ## Notation and terminology
 
@@ -37,17 +36,32 @@ Suggested home: `TauCeti/Analysis/InnerProductSpace/`, with the subspace-equalit
 - **Orthogonal families and series.** Pairwise orthogonality permits zero vectors. An orthogonal
   series is a sum of a pairwise-orthogonal family, with summability measured by the squared norms.
 
+## What Mathlib already has (consume)
+
+- **Projection and equality transport.** A finite-dimensional submodule is complete, so
+  `HasOrthogonalProjection.ofCompleteSpace` supplies its projection.
+  `LinearIsometryEquiv.ofEq` transports between equal inner-product subspaces.
+- **Invariant subspaces and restrictions.** `Module.End.invtSubmodule` records invariant
+  subspaces. `LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule` gives invariance
+  of the orthogonal complement for a symmetric operator, and
+  `LinearMap.IsSymmetric.restrict_invariant` gives symmetry of its restriction.
+- **Orthogonal sums.** After `OG-19` packages the cyclic spans as an orthogonal family,
+  `OrthogonalFamily.norm_sum` gives finite Pythagoras and
+  `OrthogonalFamily.summable_iff_norm_sq_summable` gives the complete-space summability
+  criterion. Taking limits in the finite identity gives Parseval for a specified sum.
+
 ## What is missing (build here)
 
 * Gram rigidity — equal pairwise inner products force a linear isometry equivalence — and
   the isometric first isomorphism theorem it rests on.
 * The coordinate isometry `eⱼ ↦ vⱼ` of an orthonormal family.
 * The orthogonal-series constructor for pairwise-orthogonal, not necessarily unit, vectors.
-* Reducing subspaces, and the restriction of a symmetric operator to an invariant subspace.
+* Reducing subspaces expressed using Mathlib's invariant-subspace predicate, and completeness
+  of subspaces admitting an orthogonal projection.
 
 ## The build, in layers
 
-The labels `OG-01`–`OG-22` form the complete mathematical obligation set for this roadmap.
+The labels below form the complete mathematical obligation set for this roadmap.
 Each label names one obligation. Milestones and acceptance criteria cite these labels, and
 `Suggested.lean` cites the labels represented by its sample declarations.
 
@@ -91,10 +105,6 @@ the geometric interface consumed by majorization and principal-angle constructio
   vector `x` to `∑ⱼ xⱼ vⱼ`.
 - **OG-11 — Standard-basis action.** The coordinate isometry of `OG-09` sends the standard
   basis vector `eⱼ` to `vⱼ`.
-- **OG-12 — Projection onto an orthonormal span.** The span of a finite orthonormal family
-  admits its orthogonal projection in the ambient Hilbert space.
-- **OG-13 — Isometry between equal subspaces.** An equality `U = V` of inner-product
-  subspaces induces the canonical linear isometric equivalence `U ≃ V`.
 
 ### Invariant and reducing subspaces
 
@@ -102,14 +112,8 @@ Invariant subspaces record stability under an operator, while reducing subspaces
 stability of the full orthogonal decomposition. Symmetric operators identify these notions and
 admit symmetric restrictions to invariant subspaces.
 
-- **OG-14 — Invariant subspace.** For an endomorphism `A`, define invariance of a subspace
-  `U` by the condition `A(U) ⊆ U`.
-- **OG-15 — Reducing subspace.** For an endomorphism `A`, define reduction by requiring
-  both `U` and `U⊥` to be invariant under `A`.
-- **OG-16 — Invariance and reduction for symmetric operators.** For a symmetric
-  endomorphism, a subspace is invariant exactly when it is reducing.
-- **OG-17 — Symmetry of the restriction.** The restriction of a symmetric endomorphism to
-  an invariant subspace is symmetric on that subspace.
+- **OG-15 — Reducing subspace.** For an endomorphism `A`, define reduction of `U`
+  by requiring both `U` and `U⊥` to belong to `Module.End.invtSubmodule A`.
 - **OG-18 — Completeness of projected subspaces.** In a complete Hilbert space, every
   subspace admitting an orthogonal projection is complete in its induced norm.
 
@@ -121,25 +125,19 @@ vanishing coefficients.
 
 - **OG-19 — Orthogonal family of cyclic spans.** A pairwise-orthogonal family of vectors
   determines an orthogonal family of their spans; a zero vector contributes the zero subspace.
-- **OG-20 — Finite Pythagoras identity.** For every finite subfamily of pairwise-orthogonal
-  vectors, `‖∑ᵢ vᵢ‖² = ∑ᵢ ‖vᵢ‖²`.
-- **OG-21 — Orthogonal-series summability criterion.** In a complete Hilbert space, a
-  pairwise-orthogonal family is summable exactly when the family of squared norms is summable.
-- **OG-22 — Parseval identity for a specified sum.** In a complete Hilbert space, if a
-  pairwise-orthogonal family sums to `x`, then `‖x‖² = ∑ᵢ ‖vᵢ‖²`.
 
 **Milestone — Gram rigidity.** `OG-01`–`OG-08`.
 
-**Milestone — coordinate and projection geometry.** `OG-09`–`OG-13`.
+**Milestone — coordinate isometries.** `OG-09`–`OG-11`.
 
-**Milestone — reducing subspaces.** `OG-14`–`OG-18`.
+**Milestone — reducing and projected subspaces.** `OG-15`, `OG-18`.
 
-**Milestone — orthogonal series.** `OG-19`–`OG-22`.
+**Milestone — orthogonal-family constructor.** `OG-19`.
 
 ## Worked examples (acceptance criteria)
 
 **Acceptance criteria.** Ambient Gram rigidity is `OG-07`; the reducing-subspace layer is
-`OG-14`–`OG-18`; the orthogonal-series constructor for arbitrary pairwise-orthogonal vectors
+`OG-15`, `OG-18`; the orthogonal-series constructor for arbitrary pairwise-orthogonal vectors
 is `OG-19`.
 
 ## Ordering
@@ -150,7 +148,8 @@ This roadmap is independent and rests only on Mathlib.
 constructions against the coordinate isometry and Gram rigidity;
 [`PrincipalAngles`](../PrincipalAngles/README.md) defines the overlap operator from the
 coordinate isometry; [`SelfAdjointSpectralTheory`](../SelfAdjointSpectralTheory/README.md)
-restricts symmetric operators to reducing subspaces.
+uses the reducing-subspace definition and the completeness of projected subspaces;
+symmetric restriction itself is supplied by Mathlib.
 
 ## Definitions
 

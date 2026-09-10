@@ -124,8 +124,8 @@ theorem measurable_cfc_of_hermitian (h : ℝ → ℝ) (hh : Continuous h)
 
 The fixed-threshold spectral projector onto the Hermitian eigenspaces with eigenvalue in `[c, ∞)`. -/
 noncomputable def spectralProjectionIci (c : ℝ) (A : Matrix (Fin n) (Fin n) 𝕜)
-    (hA : A.IsHermitian) : Matrix (Fin n) (Fin n) 𝕜 := by
-  sorry
+    (_hA : A.IsHermitian) : Matrix (Fin n) (Fin n) 𝕜 :=
+  cfc (Set.indicator (Set.Ici c) (1 : ℝ → ℝ)) A
 
 /-- Roadmap: MSS-B12.
 

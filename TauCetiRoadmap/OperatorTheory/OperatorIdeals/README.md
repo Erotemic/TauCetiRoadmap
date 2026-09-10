@@ -165,8 +165,9 @@ Vanishing approximation numbers encode finite rank, while convergence to zero en
 finite-rank approximability. On Hilbert targets this convergence characterizes compactness.
 
 - **OI-A23 — Vanishing from rank.** If `rank T ≤ n`, then `aₙ(T)=0`.
-- **OI-A24 — Finite-dimensional rank characterization.** In finite dimension,
-  `aₙ(T)=0` exactly when `rank T ≤ n`.
+- **OI-A24 — Finite-dimensional rank characterization.** For finite-dimensional
+  normed spaces over a complete nontrivially normed field, `aₙ(T)=0` exactly when
+  `rank T ≤ n`.
 - **OI-A25 — Finite-rank approximation characterization.** `aₙ(T) → 0` exactly when there is
   a sequence of bounded maps `(Rₙ)` with `rank Rₙ ≤ n` and `‖T-Rₙ‖ → 0`.
 - **OI-A26 — Finite rank implies compactness.** Over a proper scalar field, every finite-rank
@@ -355,8 +356,12 @@ directly from Hilbert-space geometry.
 - **OI-B35 — Basis independence.** `E_b(T)` is independent of the Hilbert basis `b`.
 - **OI-B36 — Hilbert–Schmidt norm.** Define the Hilbert–Schmidt norm as the square root of
   the finite value of `E_b(T)` on finite-energy operators.
-- **OI-B37 — Minkowski for unconditional `ℝ≥0∞` sums.** For `1≤p`, the `ℓᵖ` Minkowski
-  inequality extends to a total `tsum` inequality in `ℝ≥0∞`.
+- **OI-B37 — Minkowski for unconditional `ℝ≥0∞` sums.** For any index type `ι`,
+  functions `a,b : ι → ℝ≥0∞`, and a real exponent `p` with `1 ≤ p`,
+  `(∑' i, (a i + b i)^p)^(1/p) ≤ (∑' i, (a i)^p)^(1/p) + (∑' i, (b i)^p)^(1/p)`.
+  All powers use `ENNReal.rpow`; positive powers of `∞` are `∞`. The inequality
+  requires no summability hypotheses and includes infinite sums and infinite terms.
+  The exponent `p` is finite; the supremum norm is handled separately.
 - **OI-B38 — Hilbert–Schmidt domination.** `‖T‖ ≤ ‖T‖_{HS}` for every finite-energy `T`.
 - **OI-B39 — Hilbert–Schmidt adjoint invariance.** `‖T†‖_{HS}=‖T‖_{HS}`.
 - **OI-B40 — Hilbert–Schmidt ideal inequality.**
@@ -408,10 +413,14 @@ operator-ideal family.
   `supₙ aₙ ≤ Φ(a)` for every finitely supported nonnegative sequence `a`.
 - **OI-B58 — Sum upper bound for a symmetric gauge.**
   `Φ(a) ≤ ∑ₙ aₙ` for every finitely supported nonnegative sequence `a`.
-- **OI-B59 — Extension to arbitrary sequences.** Define
-  `Φ∞(a)=sup {Φ(b) : b finitely supported, b≤a}` with values in `ℝ≥0∞`.
-- **OI-B60 — Initial truncation formula.** If `a` is antitone, then
-  `Φ∞(a)=sup_N Φ(a restricted to {0,…,N-1})`.
+- **OI-B59 — Extension to arbitrary sequences.** For `a : ℕ → ℝ≥0∞`, define
+  `Φ∞(a)=sup {Φ(b) : b : ℕ →₀ ℝ≥0, ∀ n, (b n : ℝ≥0∞) ≤ a n}`
+  with values in `ℝ≥0∞`.
+- **OI-B60 — Initial truncation formula.** For every finite-valued sequence
+  `a : ℕ → ℝ≥0`, let `a^{<N} : ℕ →₀ ℝ≥0` agree with `a` on
+  `{0,…,N-1}` and vanish elsewhere. Then
+  `Φ∞(n ↦ (a n : ℝ≥0∞)) = sup_N (Φ(a^{<N}) : ℝ≥0∞)`.
+  This formula holds without an antitonicity hypothesis.
 - **OI-B61 — Monotonicity of the extension.** If `a≤b`, then `Φ∞(a)≤Φ∞(b)`.
 - **OI-B62 — Homogeneity of the extension.** For `c≥0`, `Φ∞(ca)=cΦ∞(a)`.
 - **OI-B63 — Subadditivity of the extension.** `Φ∞(a+b)≤Φ∞(a)+Φ∞(b)`.
@@ -593,8 +602,9 @@ consumes the Hilbert–Schmidt operator API `OI-C01`–`OI-C14` and the compactn
 ## Definitions
 
 **D1 (`OI-B59`, `OI-B60`).** The extension of a symmetric gauge is
-`Φ∞(a)=sup {Φ(b) : b finitely supported, b≤a}`. For antitone `a`, it is the supremum of the
-values on the initial truncations.
+`Φ∞(a)=sup {Φ(b) : b finitely supported, b≤a}`. For finite-valued
+`a : ℕ → ℝ≥0`, its value is the supremum over initial truncations, without an
+antitonicity hypothesis. The general extension allows `ℝ≥0∞`-valued sequences.
 
 **D2 (`OI-B64`, `OI-B65`).** The ideal family induced by a symmetric gauge has gauge
 `T ↦ Φ∞(n ↦ aₙ(T))`.

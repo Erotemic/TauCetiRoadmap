@@ -53,10 +53,13 @@ Suggested home: `TauCeti/Analysis/InnerProductSpace/`.
 
 - **Projections:** `Submodule.starProjection` with `HasOrthogonalProjection`,
   `IsStarProjection`, `Submodule.reflection`.
-- **Orthogonal families:** `OrthogonalFamily`; the non-normalized vector-to-line bridge,
-  coordinate isometry `familyIsometry`, and symmetric restriction theorem
-  `ContinuousLinearMap.IsSymmetric.restrict_of_invariant` are consumed from
+- **Orthogonal families:** `OrthogonalFamily`; the non-normalized vector-to-line constructor
+  and coordinate isometry `familyIsometry` are consumed from
   [`OrthogonalGeometry`](../OrthogonalGeometry/README.md).
+- **Invariant subspaces:** `Module.End.invtSubmodule`,
+  `LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule`, and
+  `LinearMap.IsSymmetric.restrict_invariant` supply invariant complements and symmetric
+  restrictions.
 - **Singular values:** `LinearMap.singularValues`, which the principal cosines are defined
   as.
 - **Sorted rearrangement:** Mathlib's `Monovary` rearrangement inequality supplies the
@@ -86,7 +89,8 @@ labels. `Suggested.lean` cites the labels represented by its sample declarations
 The frame layer supplies the analysis/synthesis pair. The aligned-basis layer consumes the
 coordinate isometry `OG-09`–`OG-11`; `PA-A13`–`PA-A14` record the coordinate formulas used by
 this roadmap. The overlap operator is the composite of two coordinate isometries, and its
-singular values use the singular-value theory `PD-C01`–`PD-C08`.
+singular values use Mathlib's `LinearMap.singularValues` and the Gram-spectrum and adjoint
+identities `PD-C07`–`PD-C08`.
 
 **Objects.** For a finite family `v : ι → E`: the analysis map `x ↦ (⟪vᵢ, x⟫)ᵢ`, the
 synthesis map, the frame operator on `E`, and the Gram operator on coefficient space. For two
@@ -236,10 +240,10 @@ unitarily invariant norm identities.
 
 - **PA-B19 — Cosines as singular values of the cross projection.** The singular-value
   sequence of `P_VP_U` is the principal-cosine sequence.
-- **PA-B20 — Sines from the projector difference.** The projector difference `P_U-P_V` and
-  the sine angle operator `|P_U-P_V|` have the same singular-value sequence.
-- **PA-B21 — Unitarily invariant norm bridge.** Every rectangular unitarily invariant
-  seminorm satisfies `N(P_U-P_V) = N(|P_U-P_V|)`.
+The singular-value identity for the projector difference and its modulus is the specialization
+of `PD-C28` to `P_U-P_V`. Its unitarily invariant seminorm identity uses `MAJ-B46` on the
+same square-operator carrier.
+
 - **PA-B22 — Equal-rank symmetry of principal sines.** If `U` and `V` have equal finite
   dimension, swapping them leaves the principal-sine sequence unchanged.
 - **PA-B23 — Equal-rank symmetry of principal angles.** Under the hypotheses of `PA-B22`,
@@ -294,7 +298,7 @@ operator perturbations with eigenvalue displacement.
   `∑ᵢ (λᵢ(S)-λᵢ(T))² ≥ ∑ᵢ (Re⟪vᵢ,Hvᵢ⟫)² -
   (∑ᵢ λᵢ(S)² - ∑ᵢ (Re⟪vᵢ,Svᵢ⟫)²)`.
 
-**Milestone — angle dictionary.** `PA-B01`–`PA-B29`.
+**Milestone — angle dictionary.** `PA-B01`–`PA-B19`, `PA-B22`–`PA-B29`.
 
 **Milestone — eigenvalue perturbation.** `PA-B31`–`PA-B41`.
 
@@ -302,7 +306,8 @@ operator perturbations with eigenvalue displacement.
 
 Part C supplies the finite-dimensional point-spectral vocabulary used by perturbation
 statements and the dimension-free projection-gap identity. The restriction of a symmetric
-operator to an invariant subspace uses `OG-16`–`OG-17`.
+operator to an invariant subspace uses Mathlib's
+`LinearMap.IsSymmetric.restrict_invariant`.
 
 **Objects.** Reflections; diagonal and off-diagonal operator blocks relative to `U ⊕ U⊥`;
 symmetric and directed projection gaps; the restricted point spectrum; point-spectral
@@ -361,14 +366,16 @@ order hypotheses used by perturbation theory.
   subspace `PA-C17`.
 - **PA-C19 — Point-spectral-subspace containment.** The point-spectral subspace selected by `Ω`
   has restricted point spectrum contained in `Ω`.
-- **PA-C20 — Upper form bound from point spectrum.** If a symmetric operator restricted to
-  `U` has restricted point spectrum in `(-∞,a]`, then
+- **PA-C20 — Upper form bound from point spectrum.** Let `A` be symmetric on a
+  finite-dimensional inner-product space over `RCLike 𝕜`, and let `U` be invariant under
+  `A`. If the restricted point spectrum on `U` lies in `(-∞,a]`, then
   `Re⟪Ax,x⟫ ≤ a‖x‖²` for every `x ∈ U`.
 - **PA-C21 — Point spectrum from an upper form bound.** For symmetric `A`, the upper
   quadratic-form bound `Re⟪Ax,x⟫ ≤ a‖x‖²` on `U` implies that the restricted point spectrum
   on `U` lies in `(-∞,a]`.
-- **PA-C22 — Lower form bound from point spectrum.** If a symmetric operator restricted to
-  `U` has restricted point spectrum in `[a,∞)`, then
+- **PA-C22 — Lower form bound from point spectrum.** Let `A` be symmetric on a
+  finite-dimensional inner-product space over `RCLike 𝕜`, and let `U` be invariant under
+  `A`. If the restricted point spectrum on `U` lies in `[a,∞)`, then
   `a‖x‖² ≤ Re⟪Ax,x⟫` for every `x ∈ U`.
 - **PA-C23 — Point spectrum from a lower form bound.** For symmetric `A`, the lower
   quadratic-form bound `a‖x‖² ≤ Re⟪Ax,x⟫` on `U` implies that the restricted point spectrum

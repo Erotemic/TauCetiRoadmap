@@ -105,9 +105,11 @@ The internal gap measures the separation between a selected spectral block and i
 inside one symmetric operator. It is the common spectral hypothesis for the double-angle and
 tangent estimates.
 
-- **SSP-S01 — Internal point-spectrum gap.** For a symmetric finite-dimensional operator `A`, a
-  projected subspace `U`, and `δ≥0`, define the internal gap by requiring the restricted point
-  spectra of `A|_U` and `A|_{U⊥}` to be separated by at least `δ`.
+- **SSP-S01 — Internal point-spectrum gap.** For a finite-dimensional endomorphism
+  `A`, a subspace `U`, and `δ : ℝ`, define `PointInternalGap A U δ` to require that `U`
+  is invariant under `A` and that the restricted point spectra on `U` and `U⊥` are separated
+  by at least `δ`. For symmetric `A`, the complement is invariant as well, so these are
+  the point spectra of the restrictions. The perturbation estimates require `δ > 0`.
 
 **Milestone S1 — shared internal-gap vocabulary.** `SSP-S01`.
 
@@ -157,9 +159,10 @@ real kernel, and its rotation by `-i`.
 - **SSP-A24 — Exact kernel mass.** `∫_ℝ ‖k(t)‖dt = π/2`.
 - **SSP-A25 — Fourier-normalization bridge.** The exterior identity `SSP-A23` has an
   equivalent statement in Mathlib's Fourier-transform normalization.
-- **SSP-A26 — Kernel-mass convolution test.** For the explicit bounded operator-valued test
-  integrand in the Part A acceptance suite, with `‖F(t)‖≤1`, prove
-  `‖∫_ℝ k(t)F(t)dt‖≤π/2`.
+- **SSP-A26 — Kernel-mass integral bound.** Let `G` be a complete complex normed
+  space and let `F : ℝ → G` be Bochner integrable for Lebesgue measure, with
+  `‖F(t)‖ ≤ 1` almost everywhere. For the kernel `k` of `SSP-A04`, the product
+  `t ↦ k(t) • F(t)` is integrable and `‖∫_ℝ k(t) • F(t) dt‖ ≤ π/2`.
 
 The mass identity `SSP-A24` follows by Tonelli: the inner `|sin|` Laplace integral from
 `SSP-A17` combines with `w(y)=tanh(πy/2)` so the integrand reduces to `(1+y²)⁻¹`, whose
@@ -171,7 +174,7 @@ integral over `(0,∞)` is `π/2`.
 
 **Milestone A3 — exterior identity, exact mass, and normalization.** `SSP-A23`–`SSP-A25`.
 
-**Milestone A4 — kernel-mass convolution test.** `SSP-A26`.
+**Milestone A4 — kernel-mass integral bound.** `SSP-A26`.
 
 ### Part B — Sylvester equations and the Rosenblum theorem
 
@@ -200,9 +203,14 @@ forms before the unitarily invariant extension.
   the corresponding eigenvalue difference.
 - **SSP-B04 — Coordinate Sylvester equation.** In eigenbases of `A` and `B`, every solution
   of `AX-XB=C` satisfies `(αᵢ-βⱼ)Xᵢⱼ=Cᵢⱼ`.
-- **SSP-B05 — Coercive operator invertibility.** A bounded operator with a positive
-  coercivity lower bound is invertible with inverse norm bounded by the reciprocal of the
-  coercivity constant.
+- **SSP-B05 — Coercive operator invertibility.** Let `T : E →L[𝕜] E` act on a
+  complete Hilbert space over `RCLike 𝕜`. On the underlying real Hilbert space, let
+  `B(x,y)=Re⟪Tx,y⟫` be the associated bounded real bilinear form. If `B` satisfies
+  Mathlib's `IsCoercive` predicate, with a witness `c > 0` and
+  `c‖x‖² ≤ B(x,x)` for every `x`, then `T` is a continuous linear equivalence and
+  `‖T⁻¹‖ ≤ c⁻¹`. This uses `IsCoercive.continuousLinearEquivOfBilin` and
+  `IsCoercive.antilipschitz` in `Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean`;
+  the variational-solution API is in `TauCeti/Analysis/InnerProductSpace/LaxMilgram.lean`.
 - **SSP-B06 — Lyapunov bound.** If the quadratic forms of self-adjoint `A` and `B` are
   bounded below by `δ>0`, every solution of `AX+XB=Y` satisfies
   `‖X‖≤‖Y‖/(2δ)`.
@@ -322,8 +330,13 @@ norm forms.
   `U,V`, apply `SSP-C15` with `W=V⊥` and the reversed estimate with `U⊥` and `V`. Under
   those two directed form-separation hypotheses, both directed sine bounds hold and hence
   `‖P_U-P_V‖ ≤ ‖B-A‖/g`.
-- **SSP-C17 — Residual `sin Θ` theorem.** Under interval/exterior separation, every
-  rectangular unitarily invariant seminorm satisfies `δ N(sinΘ)≤N(R)` for a trial residual.
+- **SSP-C17 — Residual `sin Θ` theorem.** Let `A : E → E` and `M : F → F` be
+  symmetric operators on finite-dimensional Hilbert spaces over `RCLike 𝕜`, let `U` be
+  an `A`-invariant target subspace, and let `X : F → E` be a linear isometry. Set
+  `R=AX-XM`. Suppose `a ≤ b`, `δ > 0`, `σ(M) ⊆ [a,b]`, and the spectrum of
+  `A|_{U⊥}` lies outside `(a-δ,b+δ)`. Every unitarily invariant seminorm `N` on
+  `F → E` then satisfies `δ N(P_{U⊥}X) ≤ N(R)`. The singular values of
+  `P_{U⊥}X` are the directed principal sines from `range X` to `U`.
 - **SSP-C18 — Perturbation `sin Θ` theorem.** Under interval/exterior separation, every
   square unitarily invariant seminorm satisfies `δ N(sinΘ)≤N(B-A)`.
 - **SSP-C19 — Canonical spectral-subspace residual form.** `SSP-C17` specializes canonically

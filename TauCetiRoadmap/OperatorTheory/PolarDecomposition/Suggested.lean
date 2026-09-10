@@ -320,23 +320,64 @@ theorem exists_linearIsometryEquiv_norm_sub_apply_le
 
 end NearIsometry
 
+section ModulusSingularValues
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+/-- Roadmap: PD-C28.
+
+The modulus has the same zero-padded singular-value sequence as the original map. -/
+theorem singularValues_operatorAbs (T : E →ₗ[𝕜] F) :
+    (operatorAbs T).singularValues = T.singularValues := by
+  sorry
+
+end ModulusSingularValues
+
 end LinearMap
 
 namespace ContinuousLinearMap
 
-section RealContinuousFunctionalCalculus
+section RCLikeContinuousFunctionalCalculus
 
-variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+
+set_option warn.classDefReducibility false in
+/-- Roadmap: PD-A10.
+
+The real algebra structure on the operator algebra is induced by `ℝ → 𝕜`. -/
+@[instance_reducible]
+noncomputable def realAlgebra : Algebra ℝ (E →L[𝕜] E) :=
+  RestrictScalars.algebra ℝ 𝕜 (E →L[𝕜] E)
+
+attribute [local instance 100] realAlgebra
+
+omit [CompleteSpace E] in
+/-- Roadmap: PD-A10.
+
+The induced real action is compatible with the `𝕜`-action on operators. -/
+theorem realIsScalarTower : IsScalarTower ℝ 𝕜 (E →L[𝕜] E) :=
+  RestrictScalars.isScalarTower ℝ 𝕜 (E →L[𝕜] E)
+
+attribute [local instance 100] realIsScalarTower
 
 /-- Roadmap: PD-A10.
 
-Every complete real Hilbert space carries the continuous functional calculus for bounded
-self-adjoint operators. -/
-instance instContinuousFunctionalCalculusRealIsSelfAdjoint :
-    ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint := by
+Real continuous functions of bounded self-adjoint operators on a complete Hilbert space
+over `RCLike 𝕜`, with the real algebra structure induced by scalar restriction. -/
+theorem instContinuousFunctionalCalculusRCLikeIsSelfAdjoint :
+    ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint := by
   sorry
 
-end RealContinuousFunctionalCalculus
+end RCLikeContinuousFunctionalCalculus
+
+-- These instances are local to this namespace. Definitions below retain the selected
+-- structures in their bodies; importing modules receive no new global instances.
+-- Low priority preserves Mathlib's instances at the concrete fields.
+attribute [local instance 100] realAlgebra realIsScalarTower
+  instContinuousFunctionalCalculusRCLikeIsSelfAdjoint instStarOrderedRingRCLike
 
 section PartialIsometry
 
@@ -386,8 +427,8 @@ variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [Complet
 /-- Roadmap: PD-A36.
 
 The complete-space rectangular modulus is the positive square root of `T†T` on the source space. -/
-noncomputable def modulus (T : E →L[𝕜] F) : E →L[𝕜] E := by
-  sorry
+noncomputable def modulus (T : E →L[𝕜] F) : E →L[𝕜] E :=
+  CFC.sqrt (T.adjoint ∘L T)
 
 /-- Roadmap: PD-A37.
 
@@ -458,25 +499,28 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[𝕜] F) :
 
 end RectangularModulus
 
-section ComplexModulusCFC
+section ModulusCFC
 
-variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Roadmap: PD-A48.
 
-Over complex Hilbert spaces, the complete-space modulus is `CFC.sqrt (T†T)`. -/
-theorem modulus_eq_cfcSqrt (T : E →L[ℂ] F) :
-    modulus T = CFC.sqrt (T.adjoint ∘L T) := by
-  sorry
+The complete-space modulus is defined by the continuous functional calculus. -/
+theorem modulus_eq_cfcSqrt (T : E →L[𝕜] F) :
+    modulus T = CFC.sqrt (T.adjoint ∘L T) := rfl
 
-end ComplexModulusCFC
+end ModulusCFC
 
 section FiniteModulusAgreement
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+local instance : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+local instance : CompleteSpace F := FiniteDimensional.complete 𝕜 F
 
 /-- Roadmap: PD-A47.
 
@@ -488,26 +532,6 @@ theorem operatorAbs_toContinuousLinearMap_eq_modulus (A : E →ₗ[𝕜] F) :
   sorry
 
 end FiniteModulusAgreement
-
-section SingularValueAccessor
-
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-variable {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-
-/-- Roadmap: PD-C01.
-
-The bounded-operator singular-value accessor is `T.toLinearMap.singularValues`. -/
-noncomputable def singularValues (T : E →L[𝕜] F) : ℕ →₀ ℝ :=
-  T.toLinearMap.singularValues
-
-/-- Roadmap: PD-C02.
-
-The bounded-operator accessor agrees with `T.toLinearMap.singularValues`. -/
-@[simp] theorem singularValues_toLinearMap (T : E →L[𝕜] F) :
-    T.toLinearMap.singularValues = singularValues T := rfl
-
-end SingularValueAccessor
 
 end ContinuousLinearMap
 
@@ -536,6 +560,5 @@ theorem exists_linearIsometryEquiv_comp_eq_comp
   sorry
 
 end Intertwining
-
 
 end TauCetiRoadmap.PolarDecomposition
