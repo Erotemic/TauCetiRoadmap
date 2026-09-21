@@ -53,6 +53,7 @@ body:
         - QuadraticFormInvariants
         - ReductiveGroups
         - RepresentationTheory
+        - RestrictedProducts
         - StablePeriodicCurved
         - StableReduction
         - StandardDistributions
