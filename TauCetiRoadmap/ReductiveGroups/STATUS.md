@@ -1,84 +1,82 @@
-<!--tauceti-status:v1 {"roadmap":"ReductiveGroups","to_sha":"e7f4d8372f5a7ad39a75e61b43864f16d1bb57a0","ts":"2026-09-09T14:34:24+10:00"}-->
+<!--tauceti-status:v1 {"roadmap":"ReductiveGroups","to_sha":"ecb4a7b62fd4acf11ddc30fb0c6a353882b77ace","ts":"2026-09-18T11:03:03Z"}-->
 # Status: ReductiveGroups
 
-This file documents the status of the ReductiveGroups roadmap up until `e7f4d83` (2026-09-09T14:34:24+10:00). There may have been subsequent updates.
+This file documents the status of the ReductiveGroups roadmap up until `ecb4a7b` (2026-09-18T11:03:03Z). There may have been subsequent updates.
 
 It is generated, and its prose is not security-validated; see
 https://github.com/TauCetiProject/TauCetiProgress for what that means.
 
 ## Where this roadmap stands
 
-**At a glance.** Layers 0-4 are done, and Layer 7 has just acquired its first general theorems:
-maximal tori and Borel subgroups exist. What is missing there is uniqueness, since no conjugacy
-statement is available, and with it the root datum of a general reductive group. Layer 8, the
-classification, has not begun.
+**At a glance.** Layers 0-2 and 4 are done, the four classical families are reductive, and three of
+them now have a root datum relative to an explicit maximal torus. The gap in the middle is conjugacy:
+no two Borels, and no two maximal tori, are known to be conjugate, which keeps the root datum of an abstract
+reductive group out of reach. Layer 8 has not begun; Layer 9 has many explicit carriers but no single
+construction from a root datum.
 
 ### Named results
 
 - **The Hopf algebra-affine group scheme anti-equivalence** — `Spec` identifies commutative Hopf
   algebras contravariantly with affine group schemes, keeping the roadmap's three models
   interchangeable ([`commHopfAlgCatOpEquivAffineGroupSchemeCat`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/AlgebraicGeometry/AffineGroupScheme/Equivalence.html#TauCeti.commHopfAlgCatOpEquivAffineGroupSchemeCat)).
-- **The embedding theorem** — every finite-type affine group scheme over a field is a closed
-  subgroup of some general linear group ([`exists_isClosedImmersion_generalLinear`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Representation/Embedding.html#TauCeti.AffineGroupSchemeCat.exists_isClosedImmersion_generalLinear)).
+- **The embedding theorem** — every finite-type affine group scheme over a field is a closed subgroup
+  of some general linear group ([`exists_isClosedImmersion_generalLinear`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Representation/Embedding.html#TauCeti.AffineGroupSchemeCat.exists_isClosedImmersion_generalLinear)).
 - **Tannakian reconstruction** — a commutative Hopf algebra's points are exactly the tensor
   automorphisms of scalar extension on its finite-dimensional comodules ([`fgPointTensorIsoEquiv`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Representation/Tannaka/Equivalence.html#TauCeti.Tannaka.fgPointTensorIsoEquiv)).
-- **Existence of maximal tori and Borel subgroups** — every finite-type affine group over a field
-  contains a maximal torus ([`exists_isMaximalTorus`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Torus/Existence.html#TauCeti.HopfIdeal.exists_isMaximalTorus)),
-  its geometric fibre contains a Borel subgroup ([`exists_geometricBorel`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Borel/Existence.html#TauCeti.HopfIdeal.exists_geometricBorel)),
-  and over an algebraically closed field every torus lies inside a Borel. The solvable radical is
-  contained in every Borel, and a normal Borel is exactly the solvable radical.
-- **Lie-Kolchin** — if the derived subgroup of a reduced finite-type affine group over an
-  algebraically closed field is geometrically unipotent, every finite-dimensional representation
-  is upper triangular in a suitable basis, with characters on the diagonal ([`exists_basis_coefficientMatrix_isUpperTriangular_of_geometricallyUnipotent_derived`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Solvable/LieKolchin.html#TauCeti.Comodule.exists_basis_coefficientMatrix_isUpperTriangular_of_geometricallyUnipotent_derived)).
-  The hypothesis is unipotence of the derived subgroup, not connectedness and solvability, and
-  nothing yet links the two.
+- **Reductivity of the classical groups** — `GLₙ`, `SLₙ` and `Sp₂ₘ` are reductive over every field, and
+  [`SOₙ` in every dimension](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/SpecialOrthogonal/Reductive.html#TauCeti.SpecialOrthogonal.reductiveCommHopfAlgProperty_finiteTypeCoordinateHopfAlgebra)
+  away from characteristic two.
+- **Existence of maximal tori and Borel subgroups** — every finite-type affine group over a field has a
+  maximal torus ([`exists_isMaximalTorus`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Torus/Existence.html#TauCeti.HopfIdeal.exists_isMaximalTorus)),
+  and its geometric fibre a Borel ([`exists_geometricBorel`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Borel/Existence.html#TauCeti.HopfIdeal.exists_geometricBorel)).
 
 ### Notable definitions and infrastructure
 
-- **Smoothness as geometric reducedness.** For a finite-type commutative Hopf algebra over a field,
-  smoothness and geometric reducedness [coincide](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Smooth/GeometricallyReduced.html#TauCeti.smoothCommHopfAlgProperty_iff_geometricallyReduced),
-  the criterion the roadmap's standing hypotheses ask for, and it lets smoothness be checked on a
-  coordinate ring.
-- **The Borel predicate.** [`IsBorel`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Borel/Basic.html#TauCeti.HopfIdeal.IsBorel)
-  is stated on Hopf ideals over an arbitrary field by base change to an algebraic closure, so
-  concrete groups can be tested against it: the upper-triangular subgroups of `GL₂` and `SL₂` are
-  Borel over every field.
-- **Group-like weight spaces of comodules.** [`weightSpace`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/Coalgebra/Comodule/Weight/Space.html#GroupLike.weightSpace)
-  presents a weight space as the joint eigenspace of the coaction components, with independence and
-  finiteness on Noetherian comodules: the machine underneath the triangularization results.
+- **Root data of the split classical groups.** `SL_{r+1}` and `Sp₂ₘ` join `GLₙ` with root data relative
+  to the diagonal torus ([`SpecialLinear.diagonalRootDatum`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/SpecialLinear/DiagonalTorus/RootDatum.html#TauCeti.SpecialLinear.diagonalRootDatum),
+  [`Symplectic.diagonalRootDatum`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/Symplectic/DiagonalTorus/RootDatum.html#TauCeti.Symplectic.diagonalRootDatum)),
+  identified with the pinned simply connected datum of the type and tied to the group by the pinning
+  equation.
+- **Subgroup schemes generated inside `GLₙ`.** The subgroup generated by a family of coordinate
+  morphisms is the quotient by the largest Hopf ideal they all kill
+  ([`generatedGroupScheme`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/Algebra/AlgebraicGroup/GeneralLinear/Generated/Basic.html#TauCeti.GeneralLinear.generatedGroupScheme)),
+  and what the generators respect its points respect: a bilinear multiplication, or a form fixed by
+  congruence.
+- **Carriers over `ℤ` with numbered data.** Types `A`, `B`, `C`, `D`, doubled `E₆`, tripled `D₄`,
+  minuscule `E₆` and `E₇`, and short-root `F₄` are toral closures of numbered root subgroups in a general
+  linear group, each with a split weight torus, pinning equations, base change, and a Frobenius whose
+  fixed points are the points over the fixed subring.
 
 ### Roadmap coverage
 
-Layers 0-2 and 4 are done. Layer 3 has Hopf ideals, kernels, identity components and fppf
-quotients, with a representability result only for the component quotient. Layer 5 has Lie-Kolchin as
-above, geometric unipotence, and a criterion making the unipotent radical trivial given a faithful
-completely reducible representation, but not the general construction-and-maximality theorem.
-Layer 6 has the radicals, the reduced centre, central isogenies, simply connected semisimple groups
-as a property, and reductivity for `GLₙ`, `SLₙ`, `Sp₂ₘ` and direct products; the special orthogonal
-groups are reductive only in ranks zero and one, and the characteristic-zero equivalence with linear
-reductivity and simply connected covers are open. Layer 7 has existence of maximal tori and Borels,
-dynamic parabolics, and root data only for `GLₙ`; conjugacy, the Weyl group of a general pair, and
-Bruhat decomposition beyond `GL₂` and `SL₂` are absent. Layer 8 is untouched. Layer 9 has explicit
-integral carriers for several types with root subgroups, weight tori, Weyl representatives and
-Frobenius endomorphisms whose fixed points are the points over the fixed subring, and the
-exceptional isogeny of `Sp₄` in characteristic two, but no uniform pinned Chevalley-Demazure
-construction and no isomorphism theorem.
+Layers 0-2 and 4 are complete; a finite-type commutative Hopf algebra is now known to be a torus exactly
+when it is of multiplicative type, geometrically connected and geometrically reduced, and Galois descent
+from a torsion-free lattice yields a torus split by that extension. Layer 3 has Hopf
+ideals, kernels, identity components and fppf quotients, representable only for the component quotient,
+and a finite-type group over a field is étale exactly when its Lie algebra vanishes. Layer 5 has geometric unipotence, Lie-Kolchin under a
+hypothesis on the derived subgroup, and recognition criteria for the unipotent radical. Layer 6 has the
+radicals, the centre (finite when the group is semisimple), central isogenies and the classical groups; linear reductivity in characteristic zero and
+simply connected covers are open. Layer 7 has existence as above, dynamic parabolics and
+Levis, and root data for `GLₙ`, `SL_{r+1}` and `Sp₂ₘ`, but no conjugacy and no abstract Weyl group.
+Layer 8 is untouched. Layer 9 has the carriers above with Weyl
+representatives, Frobenius and twisted Frobenius, graph automorphisms in types `D` and `E₆`, and the
+exceptional isogeny of `Sp₄`, but no uniform construction.
 
 ## The frontier
 
-- **Conjugacy of Borel subgroups and maximal tori.** Existence is settled; nothing yet says any two
-  are conjugate over an algebraically closed field. This is the immediate blocker for defining the
-  root datum of a group rather than of `GLₙ`.
-- **The unipotent radical.** The general construction of the maximal connected normal smooth
-  unipotent closed subgroup, with its maximality, is still missing; what exists are
-  characterizations and computations in examples.
-- **Root data and Weyl groups of a general reductive group.** Extracting roots from a maximal torus
-  and identifying the normalizer quotient as a Weyl group needs conjugacy first, then the split case
-  before any Galois or relative theory.
-- **Reductivity of the special orthogonal groups.** The standard comodule is faithful, and simple
-  in dimension at least three away from characteristic two, which is the input; the conclusion is
-  proved only for `SO₀` and `SO₁`.
-- **A uniform pinned Chevalley-Demazure construction.** The carriers exist type by type, with
-  root-subgroup and torus data and, for `B₂`, `F₄` and `G₂`, a special isogeny only at torus level.
-  A single construction from a root datum, and the isomorphism theorem for pinned groups, remain to
-  be built.
+- **Conjugacy of Borel subgroups and maximal tori.** Existence is settled and conjugation is an action
+  preserving both properties; that any two are conjugate over an algebraically closed field is not
+  proved. This blocks Layer 7.
+- **Root data and Weyl groups of a general reductive group.** The split classical groups have theirs by
+  computation; extracting roots from an arbitrary maximal torus and identifying the normalizer quotient
+  as a Weyl group needs conjugacy first.
+- **A uniform pinned Chevalley-Demazure construction.** Carriers exist type by type, and the pinned
+  rational Lie algebra now has a Chevalley system ([`exists_isChevalleySystem`](https://taucetiproject.github.io/TauCeti/docs/TauCeti/LinearAlgebra/RootSystem/SimplyConnectedRootDatum/LieAlgebra/Chevalley.html#TauCeti.DynkinType.exists_isChevalleySystem)),
+  but one construction from an arbitrary root datum, and the isomorphism theorem for pinned groups,
+  remain.
+- **The remaining numbered symmetries and special isogenies.** Triality is not recorded on the tripled
+  `D₄` carrier, `G₂` has its seven-dimensional integral representation but no carrier, and `τ` with
+  `τ² = Frob_p` exists only for `Sp₄`, not for `F₄` in characteristic two or `G₂` in characteristic three.
+- **The unipotent radical, and non-split forms.** The maximal connected normal smooth unipotent closed
+  subgroup has no general maximality theorem; the absolute root datum with its Galois action and the
+  relative root system are untouched.
