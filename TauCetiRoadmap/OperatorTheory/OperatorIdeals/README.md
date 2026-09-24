@@ -162,7 +162,8 @@ roadmap.
 #### Rank, approximability, and compactness
 
 Vanishing approximation numbers encode finite rank, while convergence to zero encodes
-finite-rank approximability. On Hilbert targets this convergence characterizes compactness.
+finite-rank approximability. On complete Hilbert targets this convergence characterizes
+compactness.
 
 - **OI-A23 — Vanishing from rank.** If `rank T ≤ n`, then `aₙ(T)=0`.
 - **OI-A24 — Finite-dimensional rank characterization.** For finite-dimensional
@@ -172,15 +173,20 @@ finite-rank approximability. On Hilbert targets this convergence characterizes c
   a sequence of bounded maps `(Rₙ)` with `rank Rₙ ≤ n` and `‖T-Rₙ‖ → 0`.
 - **OI-A26 — Finite rank implies compactness.** Over a proper scalar field, every finite-rank
   bounded map is compact.
-- **OI-A27 — Approximability implies compactness.** Over a proper scalar field, every
-  operator satisfying the equivalent conditions of `OI-A25` is compact.
+- **OI-A27 — Approximability implies compactness.** Over a proper scalar field, and with
+  `[CompleteSpace F]` for the target, every operator satisfying the equivalent conditions of
+  `OI-A25` is compact.
 - **OI-A28 — Compactness implies approximation on a Hilbert target.** If the target is an
   inner-product space and `T` is compact, then `aₙ(T) → 0`.
-- **OI-A29 — Hilbert-target compactness characterization.** With a Hilbert target,
-  `T` is compact exactly when `aₙ(T) → 0`.
+- **OI-A29 — Hilbert-target compactness characterization.** With a target carrying both
+  `InnerProductSpace 𝕜 F` and `[CompleteSpace F]`, `T` is compact exactly when
+  `aₙ(T) → 0`.
 
-`OI-A28` places the inner-product structure on the target. The source retains the general
-normed-space hypotheses of the approximation-number layer, and the target may be incomplete.
+`OI-A27` is the direction that requires target completeness. `OI-A28` does not: it places the
+inner-product structure on the target so finite-dimensional orthogonal projections can supply
+finite-rank approximants. The source retains the general normed-space hypotheses of the
+approximation-number layer, and the target in `OI-A28` may be incomplete. Thus `OI-A29`
+combines the two directions only for a complete Hilbert target.
 
 #### Hilbert-space invariance and lower bounds
 
@@ -212,8 +218,8 @@ and supplies the bridge used by Ky Fan estimates.
 - **OI-A37 — Closed-unit-ball formulation.** For each candidate `V`, the tail norm in
   `OI-A35` is the supremum of `‖Tx‖` over `x ∈ V⊥` with `‖x‖ ≤ 1`.
 - **OI-A38 — Pair-level min–max localization property.** Define the property that every
-  strict lower bound `r<aₙ(T)` is improved by a uniform lower bound on the span of `n+1`
-  linearly independent vectors.
+  nonnegative strict lower bound `0 ≤ r < aₙ(T)` is improved by a uniform lower bound on the
+  span of `n+1` linearly independent vectors.
 - **OI-A39 — Converse min–max localization.** Every Hilbert-space pair over `RCLike`
   satisfies the property in `OI-A38`.
 - **OI-A40 — Finite-restriction supremum.** `aₙ(T)` is the least upper bound of the lower
@@ -485,14 +491,24 @@ trace, Hilbert–Schmidt, and operator-norm endpoints.
 
 #### Orthogonal block sums
 
-Orthogonal block sums merge approximation-number sequences by decreasing rearrangement. The
-resulting gauge bounds provide the sharp two-block comparison used by downstream consumers.
+Orthogonal block sums merge approximation-number sequences by generalized decreasing order
+statistics. This operation records the `n`-th largest value in the generalized sense and is
+not required to enumerate every entry of the multiset union; that distinction is essential for
+noncompact blocks with infinite plateaus.
 
-- **OI-B91 — Approximation numbers of a block sum.** For a block-diagonal operator on
-  orthogonal source and target decompositions, its approximation-number sequence is the
-  decreasing rearrangement of the union of the block sequences.
-- **OI-B92 — Symmetric-gauge block formula.** Every symmetric gauge applied to a block sum is
-  the same gauge applied to the decreasing rearrangement in `OI-B91`.
+- **OI-B89 — Generalized decreasing merge.** For bounded nonnegative sequences
+  `a,b : ℕ → ℝ≥0`, define `(a ⊔↓ b)ₙ` to be
+  `sup {r : ℝ≥0 | ∃ q : Fin (n+1) → Sum ℕ ℕ, Function.Injective q ∧
+  ∀ i, r ≤ (Sum.elim a b) (q i)}`.
+  Equivalently, `(a ⊔↓ b)ₙ` is the generalized `n`-th order statistic of the multiset union;
+  it is not required to enumerate every entry of that union.
+- **OI-B91 — Approximation numbers of a block sum.** For bounded operators `T₁,T₂` on
+  complete orthogonal Hilbert blocks, the approximation numbers of the block sum satisfy
+  `aₙ(T₁ ⊕ T₂) = (a(T₁) ⊔↓ a(T₂))ₙ` for every `n`, with the generalized merge from `OI-B89`.
+- **OI-B92 — Symmetric-gauge block formula.** If `Φ∞` is the extended symmetric gauge from
+  `OI-B59`, then the gauge of its induced family satisfies
+  `Φ(T₁ ⊕ T₂) = Φ∞(n ↦ ((a(T₁) ⊔↓ a(T₂))ₙ : ℝ≥0∞))`, using the generalized merge from
+  `OI-B89`.
 - **OI-B93 — Block lower bound.** For two blocks,
   `max(Φ(T₁),Φ(T₂)) ≤ Φ(T₁⊕T₂)`.
 - **OI-B94 — Block upper bound.** For two blocks,
@@ -509,7 +525,7 @@ resulting gauge bounds provide the sharp two-block comparison used by downstream
 
 **Milestone B5 — Ky Fan transfer and Schatten families.** `OI-B24`, `OI-B74`–`OI-B88`, `OI-B90`.
 
-**Milestone B6 — orthogonal block sums.** `OI-B91`–`OI-B94`.
+**Milestone B6 — orthogonal block sums.** `OI-B89`, `OI-B91`–`OI-B94`.
 
 ### Part C — Hilbert–Schmidt operators as an `ℓ²` space of columns
 
@@ -619,6 +635,10 @@ antitonicity hypothesis. The general extension allows `ℝ≥0∞`-valued sequen
 
 **D6 (`OI-C02`).** An `ℓ²` column family `(fᵢ)` represents the operator
 `x ↦ ∑' i, ⟪bᵢ,x⟫ fᵢ`.
+
+**D7 (`OI-B89`).** For bounded nonnegative sequences `a,b`, the generalized decreasing merge
+`a ⊔↓ b` is defined by generalized order statistics: its `n`-th term is the supremum of the
+thresholds attained by at least `n+1` distinct entries of the multiset union of `a` and `b`.
 
 ## References
 

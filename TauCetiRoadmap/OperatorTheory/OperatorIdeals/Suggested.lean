@@ -575,9 +575,10 @@ gauge is squeezed between the maximum and the sum of the two block gauges.
 
 Both bounds are formal consequences of the family laws: the upper bound is
 subadditivity applied to the splitting, and the lower bound is the two-sided ideal law
-applied to each contractive compression.  The more general statement identifying the
-approximation-number sequence with the decreasing rearrangement of the union of the block
-sequences is a separate approximation-number target.
+applied to each contractive compression.  The more general statement identifies the
+approximation-number sequence with the roadmap's generalized decreasing order-statistic merge
+of the two block sequences; it is a separate approximation-number target and is not an
+enumeration assumption in the noncompact case.
 
 Roadmap: `OI-B93`, `OI-B94`. -/
 theorem gauge_blockSum_le (Φ : OperatorIdealFamily.{u, v, w} 𝕜)
