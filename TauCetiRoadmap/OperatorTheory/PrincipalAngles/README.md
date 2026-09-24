@@ -285,11 +285,13 @@ operator perturbations with eigenvalue displacement.
 - **PA-B37 — Range preservation of the trial factorization.** The isometric factor in
   `PA-B18` has range `range X`.
 - **PA-B38 — Inverse-coordinate bound.** Let `ε>0` and suppose the trial map `X`
-  satisfies the squared-norm lower frame bound `ε‖x‖² ≤ ‖Xx‖²` for every `x`. For the
-  coordinate factor `C=(X†X)^(1/2)` from `PA-B36`, `‖C⁻¹‖ ≤ ε⁻¹ᐟ²`.
-- **PA-B39 — Composition cost in unitarily invariant seminorms.** Under the same squared-norm
+  satisfies the linear-norm lower frame bound `ε‖x‖ ≤ ‖Xx‖` for every `x`. For the
+  coordinate factor `C=(X†X)^(1/2)` from `PA-B36`, `‖C⁻¹‖ ≤ ε⁻¹`. This uses the
+  lower-singular-value normalization; relative to the squared-norm convention of `PA-A11`–`PA-A12`,
+  the corresponding frame-bound parameter is `a = ε²`.
+- **PA-B39 — Composition cost in unitarily invariant seminorms.** Under the same linear-norm
   lower frame bound as `PA-B38`, every rectangular unitarily invariant seminorm satisfies
-  `N(A ∘ C⁻¹) ≤ N(A) ε⁻¹ᐟ²`.
+  `N(A ∘ C⁻¹) ≤ N(A) ε⁻¹`.
 - **PA-B40 — Hoffman–Wielandt inequality.** For symmetric `T,S` with decreasing eigenvalue
   lists and every orthonormal basis `(eₖ)`,
   `∑ᵢ (λᵢ(T)-λᵢ(S))² ≤ ∑ₖ ‖(S-T)eₖ‖²`.
