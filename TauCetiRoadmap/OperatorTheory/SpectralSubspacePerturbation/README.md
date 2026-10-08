@@ -236,9 +236,13 @@ Frobenius estimate follows directly from the coordinate equation.
 - **SSP-B11 — Simultaneous Ky Fan prefix estimate.** Under pairwise spectral separation by
   `δ>0`, all Ky Fan prefix gauges of the solution are bounded simultaneously by
   `(π/(2δ))` times the corresponding prefixes of the defect.
-- **SSP-B12 — Reciprocal-multiplier unitary representation.** In finite dimension, the
-  reciprocal matrix multiplier for a separated pair is represented by a finite barycentric
-  combination of left and right unitary actions with total mass at most `π/2`.
+- **SSP-B12 — Reciprocal-multiplier unitary representation.** In finite dimension, for a pair
+  separated by `δ>0`, the **`δ`-normalized** reciprocal matrix multiplier, with entries
+  `δ/(αᵢ-βⱼ)`, is represented by a finite barycentric combination of left and right unitary
+  actions with total mass at most `π/2`. ⚠ The normalization is load-bearing: the unnormalized
+  multiplier has no such representation, since for `A=¼I` and `B=0` it is multiplication by `4`,
+  while any barycentric combination of unitary actions of total mass at most `π/2` has operator
+  norm at most `π/2`. This is the representation behind the `δN(X)≤(π/2)N(C)` form of `SSP-B13`.
 - **SSP-B13 — Pairwise unitarily invariant Sylvester bound.** Under pairwise separation by
   `δ>0`, every rectangular unitarily invariant seminorm satisfies
   `δ N(X)≤(π/2)N(C)`.

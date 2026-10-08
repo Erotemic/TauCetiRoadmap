@@ -97,10 +97,10 @@ roughly 130 declarations: `StronglyContinuousSemigroup` and `ContractionSemigrou
 This implements Part A of the
 [one-parameter semigroups roadmap](https://github.com/TauCetiProject/TauCetiRoadmap/blob/main/TauCetiRoadmap/OneParameterSemigroups/README.md).
 
-Tau Ceti provides the real-scalar `TauCeti.LinearPMap` resolvent core in
-`TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`. Part D generalizes that API to the
-scalar fields used by the self-adjoint development while preserving its names and `zI-A`
-convention.
+Tau Ceti provides the `TauCeti.LinearPMap` resolvent core in
+`TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`, already stated over a nontrivially normed
+scalar field with the `zI-A` convention. Part D consumes it and builds the self-adjoint spectral
+theory on top, rather than restating it.
 
 ---
 
@@ -551,12 +551,12 @@ form inequalities.
 
 ### Part D — resolvents of self-adjoint `LinearPMap` operators, and semiboundedness
 
-This Part starts from the real-scalar API in
-`TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded` and generalizes it over Mathlib's
-nontrivially normed scalar fields.
+This Part builds on the scalar-generic API in
+`TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`.
 
-**Objects.** The scalar-generic `TauCeti.LinearPMap` resolvent core, the spectrum of a partial
-operator, and the Cayley transform of a complex self-adjoint partial operator.
+**Objects.** The spectrum of a partial operator, and the Cayley transform of a complex
+self-adjoint partial operator, over the existing scalar-generic `TauCeti.LinearPMap` resolvent
+core.
 
 #### Resolvent algebra
 
@@ -564,15 +564,13 @@ The resolvent set records shifts `zI-A` with bounded two-sided inverses into the
 resolvent identity, commutation, openness, and spectral mapping form the algebraic layer for the
 self-adjoint estimates.
 
-- **SA-D01 — Resolvent core of a partial operator.** Generalize the existing
-  `TauCeti.LinearPMap` resolvent API in place from real scalars to a nontrivially normed scalar
-  field, preserving the declaration names, the `zI-A` convention, and existing real-scalar
-  callers. The generalized API includes `IsResolventAt` and its bijectivity lemmas,
-  `resolventSet`, the named `resolvent` and inverse/domain laws,
-  `eq_of_le_of_mem_resolventSet`, operator/resolvent commutation, the first resolvent identity
-  and resolvent commutation, Neumann perturbation and openness, and the bounded-operator
-  bridges. At `𝕜 = ℝ` these specialize to the current public API; the scalar-generic Neumann
-  hypothesis uses `‖μ-λ‖`, which is `|μ-λ|` over `ℝ`.
+- **SA-D01 — Resolvent core of a partial operator.** Already supplied by
+  `TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`, over
+  `[NontriviallyNormedField 𝕜]`: `IsResolventAt` and its bijectivity lemmas, `resolventSet`, the
+  named `resolvent` and its inverse and domain laws, `eq_of_le_of_mem_resolventSet`, operator and
+  resolvent commutation, the first resolvent identity and resolvent commutation, Neumann
+  perturbation and openness, and the bounded-operator conversions. Consume these declarations
+  under their existing names; do not restate them here.
 - **SA-D02 — Spectrum of a partial operator.** In the setting of `SA-D01`, define
   `TauCeti.LinearPMap.spectrum A` as the complement of `TauCeti.LinearPMap.resolventSet A`,
   in the same namespace and with dot notation `A.spectrum`.
